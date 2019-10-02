@@ -85,6 +85,8 @@ public class MoveTokensScript : MonoBehaviour {
 		}
 	}
 
+	// didn't read to understand lines below
+
 	private void MoveTokenToEmptyPos(int startGridX, int startGridY,
 	                                int endGridX, int endGridY,
 	                                GameObject token){
