@@ -25,13 +25,20 @@ public class InputManagerScript : MonoBehaviour {
 
 		if(ReferenceEquals(_selected, null)) // if no game object is selected yet
 		{
-			_selected = overlapPoint.gameObject; // pass the game object at the overlap point to _selected, _selected is the first token gameObject's temporary storage
+			_selected = overlapPoint.gameObject; // get the game object at the overlap point, pass it to _selected, _selected is the first token gameObject's temporary storage
+
+			var defaultColor = _selected.GetComponent<SpriteRenderer>().color; // cache default color
+			
 			_selected.GetComponent<SpriteRenderer>().color = Color.red;
 		} 
 		else 
 		{
+			var _selectedTokenTwo = overlapPoint.gameObject;
 			var pos1 = _gameManager.GetPositionOfTokenInGrid(_selected);
-			var pos2 = _gameManager.GetPositionOfTokenInGrid(overlapPoint.gameObject);
+			var pos2 = _gameManager.GetPositionOfTokenInGrid(_selectedTokenTwo);
+			
+			_selectedTokenTwo.GetComponent<SpriteRenderer>().color = Color.yellow;
+
 
 			if(Math.Abs(Mathf.Abs((pos1.x - pos2.x) + (pos1.y - pos2.y)) - 1) < 0.01f){ //strange math???
 				_moveManager.SetupTokenExchange(_selected, pos1, overlapPoint.gameObject, pos2, true);

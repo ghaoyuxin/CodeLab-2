@@ -6,7 +6,7 @@ public class SelectTokenColor : MonoBehaviour
 {
     private InputManagerScript _inputManager;
     private MoveTokensScript _moveTokens;
-    private bool selected;
+    private bool selected = false;
 
     void Start()
     {
