@@ -59,7 +59,9 @@ public class MatchManagerScript : MonoBehaviour {
 			}
 		}
 
-		return matchLength;
+		return matchLength; // even though it returns only an int, 
+		//but the function itself carries information of the matches (x, y) values. 
+		//This will be crucial for removing matches
 	}
 	
 	private int _GetVerticalMatchLength(int x, int y){
