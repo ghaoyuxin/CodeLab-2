@@ -75,9 +75,13 @@ public class MoveTokensScript : MonoBehaviour {
 			gameManager.gridArray[(int)exchangeGridPos2.x, (int)exchangeGridPos2.y] = exchangeToken1; //pass the game objects X, Y to the grid?????
 			gameManager.gridArray[(int)exchangeGridPos1.x, (int)exchangeGridPos1.y] = exchangeToken2;
 
+			exchangeToken1.GetComponent<SpriteRenderer>().color = Color.white;
+			exchangeToken2.GetComponent<SpriteRenderer>().color = Color.white;
+
 			if(!matchManager.GridHasMatch() && userSwap){
 				SetupTokenExchange(exchangeToken1, exchangeGridPos2, exchangeToken2, exchangeGridPos1, false);
-			} else {
+			} 
+			else {
 				exchangeToken1 = null;
 				exchangeToken2 = null;
 				move = false;
