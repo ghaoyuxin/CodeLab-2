@@ -56,7 +56,7 @@ public class MoveTokensScript : MonoBehaviour {
 		exchangeGridPos1 = pos1;
 		exchangeGridPos2 = pos2;
 
-		this.userSwap = reversable;
+		this.userSwap = reversable; // what does this line mean?
 	}
 
 	private void ExchangeTokens(){
@@ -71,8 +71,8 @@ public class MoveTokensScript : MonoBehaviour {
 		exchangeToken2.transform.position = movePos2;
 
 		
-		if(Math.Abs(lerpPercent - 1) < 0.01f){
-			gameManager.gridArray[(int)exchangeGridPos2.x, (int)exchangeGridPos2.y] = exchangeToken1;
+		if(Math.Abs(lerpPercent - 1) < 0.01f){ // what does this line of math mean?
+			gameManager.gridArray[(int)exchangeGridPos2.x, (int)exchangeGridPos2.y] = exchangeToken1; //pass the game objects X, Y to the grid?????
 			gameManager.gridArray[(int)exchangeGridPos1.x, (int)exchangeGridPos1.y] = exchangeToken2;
 
 			if(!matchManager.GridHasMatch() && userSwap){

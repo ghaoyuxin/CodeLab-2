@@ -105,7 +105,7 @@ public class MatchManagerScript : MonoBehaviour {
 
 					for(var currentX = x; currentX < x + horizonMatchLength; currentX++)
 					{
-						var token = _gameManager.gridArray[currentX, y]; 
+						var token = _gameManager.gridArray[currentX, y]; // token is a game object
 						if (!ReferenceEquals(token, null)) Destroy(token);
 
 						_gameManager.gridArray[currentX, y] = null;
