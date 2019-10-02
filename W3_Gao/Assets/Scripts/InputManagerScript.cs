@@ -25,7 +25,8 @@ public class InputManagerScript : MonoBehaviour {
 
 		if(ReferenceEquals(_selected, null)) // if no game object is selected yet
 		{
-			_selected = overlapPoint.gameObject; // pass the game object at the overlap point to _selected, _selected is the first token's temporary storage
+			_selected = overlapPoint.gameObject; // pass the game object at the overlap point to _selected, _selected is the first token gameObject's temporary storage
+			_selected.GetComponent<SpriteRenderer>().color = Color.red;
 		} 
 		else 
 		{
