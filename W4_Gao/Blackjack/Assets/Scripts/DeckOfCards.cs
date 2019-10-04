@@ -52,7 +52,7 @@ public class DeckOfCards : MonoBehaviour {
 
 			switch(cardNum){
 			case Type.A:
-				val = 11;
+				val = 11; // the card value should be 1, when the handValue is >= 10
 				break;
 			case Type.K:
 			case Type.Q:

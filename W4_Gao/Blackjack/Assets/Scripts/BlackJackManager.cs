@@ -49,12 +49,16 @@ public class BlackJackManager : MonoBehaviour {
 		SceneManager.LoadScene(loadScene);
 	}
 
-	public virtual int GetHandValue(List<DeckOfCards.Card> hand){
+	public virtual int GetHandValue(List<DeckOfCards.Card> hand)
+	{
 		int handValue = 0;
 
 		foreach(DeckOfCards.Card handCard in hand){
 			handValue += handCard.GetCardHighValue();
 		}
-		return handValue;
+		// if player has Black Jack, and the handValue is > 21, the A card value should be 1, 
+		if (!ReferenceEquals(DeckOfCards.Card.Type.A, null) && handValue > 21) return handValue - 10;
+
+		else return handValue;
 	}
 }
