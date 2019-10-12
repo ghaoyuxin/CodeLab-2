@@ -4,75 +4,85 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class BlackJackHand : MonoBehaviour {
+public class BlackJackHand : MonoBehaviour
+{
 
-	public Text total;
-	public float xOffset;
-	public float yOffset;
-	public GameObject handBase;
-	public int handVals;
+    public Text total;
+    public float xOffset;
+    public float yOffset;
+    public GameObject handBase;
+    public int handVals;
 
-	protected DeckOfCards deck;
-	protected List<DeckOfCards.Card> hand;
-	bool stay = false;
+    protected DeckOfCards deck;
+    protected List<DeckOfCards.Card> hand;
+    bool stay = false;
 
-	// Use this for initialization
-	void Start () {
-		SetupHand();
-	}
+    // Use this for initialization
+    void Start()
+    {
+        SetupHand();
+    }
 
-	protected virtual void SetupHand(){
-		deck = GameObject.Find("Deck").GetComponent<DeckOfCards>();
-		hand = new List<DeckOfCards.Card>();
-		HitMe();
-		HitMe();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
+    protected virtual void SetupHand()
+    {
+        deck = GameObject.Find("Deck").GetComponent<DeckOfCards>();
+        hand = new List<DeckOfCards.Card>();
+        HitMe();
+        HitMe();
+    }
 
-	public void HitMe(){
-		if(!stay){
-			DeckOfCards.Card card = deck.DrawCard();
+    // Update is called once per frame
+    void Update()
+    {
+    }
 
-			GameObject cardObj = Instantiate(Resources.Load("prefab/Card")) as GameObject;
+    public void HitMe()
+    {
+        if (!stay)
+        {
+            DeckOfCards.Card card = deck.DrawCard();
 
-			ShowCard(card, cardObj, hand.Count);
+            GameObject cardObj = Instantiate(Resources.Load("prefab/Card")) as GameObject;
 
-			hand.Add(card);
+            ShowCard(card, cardObj, hand.Count);
 
-			ShowValue();
-		}
-	}
+            hand.Add(card);
 
-	protected void ShowCard(DeckOfCards.Card card, GameObject cardObj, int pos){
-		cardObj.name = card.ToString();
+            ShowValue();
+        }
+    }
 
-		cardObj.transform.SetParent(handBase.transform);
-		cardObj.GetComponent<RectTransform>().localScale = new Vector2(1, 1);
-		cardObj.GetComponent<RectTransform>().anchoredPosition = 
-			new Vector2(
-				xOffset + pos * 110, 
-				yOffset);
+    protected void ShowCard(DeckOfCards.Card card, GameObject cardObj, int pos)
+    {
+        cardObj.name = card.ToString();
 
-		cardObj.GetComponentInChildren<Text>().text = deck.GetNumberString(card);
-		cardObj.GetComponentsInChildren<Image>()[1].sprite = deck.GetSuitSprite(card);
-	}
+        cardObj.transform.SetParent(handBase.transform);
+        cardObj.GetComponent<RectTransform>().localScale = new Vector2(1, 1);
+        cardObj.GetComponent<RectTransform>().anchoredPosition =
+            new Vector2(
+                xOffset + pos * 110,
+                yOffset);
 
-	protected virtual void ShowValue(){
-		handVals = GetHandValue();
-			
-		total.text = "Player: " + handVals;
+        cardObj.GetComponentInChildren<Text>().text = deck.GetNumberString(card);
+        cardObj.GetComponentsInChildren<Image>()[1].sprite = deck.GetSuitSprite(card);
+    }
 
-		if(handVals > 21){
-			GameObject.Find("BlackJackManager").GetComponent<BlackJackManager>().PlayerBusted();
-		}
-	}
+    protected virtual void ShowValue()
+    {
+        handVals = GetHandValue();
 
-	public int GetHandValue(){
-		BlackJackManager manager = GameObject.Find("BlackJackManager").GetComponent<BlackJackManager>();
+        total.text = "Player: " + handVals;
 
-		return manager.GetHandValue(hand);
-	}
+        if (handVals > 21)
+        {
+            GameObject.Find("BlackJackManager").GetComponent<BlackJackManager>().PlayerBusted();
+        }
+    }
+
+    public int GetHandValue()
+    {
+        BlackJackManager manager = GameObject.Find("BlackJackManager").GetComponent<BlackJackManager>();
+
+        return manager.GetHandValue(hand);
+    }
 }
