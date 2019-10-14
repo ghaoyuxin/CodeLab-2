@@ -45,12 +45,21 @@ public class DealerHand : BlackJackHand
                 {
                     manager.DealerBusted();
                 }
-                else if (!DealStay(handVals))
+                else if (!DealStay(handVals)) //if dealer hand is over 17, it stops bidding
                 {
                     Invoke("HitMe", 1);
                 }
-                else // what's the logic here?
+                // else if (DealStay(handVals)) // let player play another round
+                // {
+                //     manager.HideShowPlayerButtons(true);
+                // }
+                else
                 {
+                    // if (playerHand.handVals == 21) // if player has 21, automatically declare win
+                    // {
+                    //     manager.PlayerWin();
+                    // }
+
                     if (handVals < playerHand.handVals)
                     {
                         manager.PlayerWin();

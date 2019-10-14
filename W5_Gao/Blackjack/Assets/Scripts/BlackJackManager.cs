@@ -11,9 +11,11 @@ public class BlackJackManager : MonoBehaviour
     public GameObject tryAgain;
     public string loadScene;
 
+    public GameObject hitButton, stayButton;
+
     public void PlayerBusted()
     {
-        HidePlayerButtons();
+        HideShowPlayerButtons(false);
         GameOverText("YOU BUST", Color.red);
     }
 
@@ -36,7 +38,7 @@ public class BlackJackManager : MonoBehaviour
     public void BlackJack()
     {
         GameOverText("Black Jack!", Color.green);
-        HidePlayerButtons();
+        HideShowPlayerButtons(false);
     }
 
     public void GameOverText(string str, Color color)
@@ -47,15 +49,15 @@ public class BlackJackManager : MonoBehaviour
         tryAgain.SetActive(true);
     }
 
-    public void HidePlayerButtons()
+    public void HideShowPlayerButtons(bool showButtons) //make this a switch
     {
-        GameObject.Find("HitButton").SetActive(false);
-        GameObject.Find("StayButton").SetActive(false);
+        hitButton.SetActive(showButtons);
+        stayButton.SetActive(showButtons);
     }
 
     public void TryAgain()
     {
-        SceneManager.LoadScene(loadScene); // this is a suprising way to loadScene
+        SceneManager.LoadScene(loadScene); // don't reload scene, but go to another round
     }
 
     public virtual int GetHandValue(List<DeckOfCards.Card> hand)//
