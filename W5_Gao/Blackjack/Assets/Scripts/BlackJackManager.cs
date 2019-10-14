@@ -14,6 +14,11 @@ public class BlackJackManager : MonoBehaviour
 
     public GameObject hitButton, stayButton; //public Hit Button, Stay Button
 
+    void Start()
+    {
+        int placeholder = PublicVars.roundCount % 5 + 1; //load the scene with round count
+        round.text = "Round: " + placeholder + "/5";
+    }
     public void PlayerBusted()
     {
         HideShowPlayerButtons(false);
@@ -58,17 +63,15 @@ public class BlackJackManager : MonoBehaviour
 
     public void TryAgain()
     {
-        RoundRound();
+        CountRound();
         //reload the scene
         SceneManager.LoadScene(loadScene);
     }
 
-    public void RoundRound()  //Round how many round you have played, update the canvas
+    public void CountRound()  //Round how many round you have played, update the canvas
     {
-        int roundCount = 1; //??????? how to not change it during reset
-        roundCount++;
-        int placeholder = roundCount % 5;
-        round.text = "Round: " + placeholder + "/5";
+        PublicVars.roundCount++;
+        print(PublicVars.roundCount);
     }
 
     public virtual int GetHandValue(List<DeckOfCards.Card> hand)//
