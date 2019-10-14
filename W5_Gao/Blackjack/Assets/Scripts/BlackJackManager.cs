@@ -8,6 +8,7 @@ public class BlackJackManager : MonoBehaviour
 {
 
     public Text statusText;
+    public Text round;
     public GameObject tryAgain;
     public string loadScene;
 
@@ -57,21 +58,31 @@ public class BlackJackManager : MonoBehaviour
 
     public void TryAgain()
     {
-        SceneManager.LoadScene(loadScene); // don't reload scene, but go to another round
+        RoundRound();
+        //reload the scene
+        SceneManager.LoadScene(loadScene);
+    }
+
+    public void RoundRound()  //Round how many round you have played, update the canvas
+    {
+        int roundCount = 1; //??????? how to not change it during reset
+        roundCount++;
+        int placeholder = roundCount % 5;
+        round.text = "Round: " + placeholder + "/5";
     }
 
     public virtual int GetHandValue(List<DeckOfCards.Card> hand)//
     {
         int handValue = 0;
-        int AceCount = 0;
+        int AceRound = 0;
 
         foreach (DeckOfCards.Card handCard in hand)
         {
             handValue += handCard.GetCardHighValue();
-            if (handCard.GetCardHighValue() == 11) AceCount++; // ace count
+            if (handCard.GetCardHighValue() == 11) AceRound++; // ace Round
         }
 
-        for (int i = 0; i < AceCount; i++)
+        for (int i = 0; i < AceRound; i++)
         {
             if (handValue > 21) handValue -= 10;
         }
