@@ -49,16 +49,8 @@ public class DealerHand : BlackJackHand
                 {
                     Invoke("HitMe", 1);
                 }
-                // else if (DealStay(handVals)) // let player play another round
-                // {
-                //     manager.HideShowPlayerButtons(true);
-                // }
                 else
                 {
-                    // if (playerHand.handVals == 21) // if player has 21, automatically declare win
-                    // {
-                    //     manager.PlayerWin();
-                    // }
 
                     if (handVals < playerHand.handVals)
                     {

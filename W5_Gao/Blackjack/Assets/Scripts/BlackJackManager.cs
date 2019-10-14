@@ -11,7 +11,7 @@ public class BlackJackManager : MonoBehaviour
     public GameObject tryAgain;
     public string loadScene;
 
-    public GameObject hitButton, stayButton;
+    public GameObject hitButton, stayButton; //public Hit Button, Stay Button
 
     public void PlayerBusted()
     {
@@ -37,7 +37,7 @@ public class BlackJackManager : MonoBehaviour
 
     public void BlackJack()
     {
-        GameOverText("Black Jack!", Color.green);
+        GameOverText("Black Jack!", Color.black);
         HideShowPlayerButtons(false);
     }
 
@@ -77,7 +77,6 @@ public class BlackJackManager : MonoBehaviour
         }
         //if player has Black Jack, and the handValue is > 21, the A card value should be 1, 
         //if (!ReferenceEquals((DeckOfCards.Card.Type.A), null) && handValue > 21) return handValue - 10;
-
         return handValue;
     }
 }

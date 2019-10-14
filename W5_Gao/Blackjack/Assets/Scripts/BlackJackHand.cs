@@ -16,6 +16,7 @@ public class BlackJackHand : MonoBehaviour
     protected DeckOfCards deck;
     protected List<DeckOfCards.Card> hand;
     bool stay = false;
+    private bool isSetup = true;
 
     // Use this for initialization
     void Start()
@@ -26,9 +27,11 @@ public class BlackJackHand : MonoBehaviour
     protected virtual void SetupHand()
     {
         deck = GameObject.Find("Deck").GetComponent<DeckOfCards>();
+        BlackJackManager manager = GameObject.Find("BlackJackManager").GetComponent<BlackJackManager>();
         hand = new List<DeckOfCards.Card>();
         HitMe();
         HitMe();
+        isSetup = false;
     }
 
     // Update is called once per frame
@@ -79,7 +82,11 @@ public class BlackJackHand : MonoBehaviour
         {
             manager.PlayerBusted();
         }
-        if (handVals == 21) // if player has 21, automatically declare win
+        if (handVals == 21 && isSetup) // if player has 21 during setup, show BlackJack! prompt
+        {
+            manager.BlackJack();
+        }
+        if (handVals == 21 && !isSetup) // if player has 21 after setup, automatically declare win
         {
             manager.HideShowPlayerButtons(false);
             manager.PlayerWin();
