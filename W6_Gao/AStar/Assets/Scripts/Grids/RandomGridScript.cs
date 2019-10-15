@@ -30,7 +30,7 @@ public class RandomGridScript : GridScript
             for (int j = 0; j < gridWidth; j++)
             {
                 var mapTile = UnityEngine.Random.Range(0, 100);
-                if (mapTile < rockPercentage * 100) lineOfGrid += "r";//make a line of the arrays
+                if (mapTile < rockPercentage * 100) lineOfGrid += "r";//add to the string
                 else if (mapTile < rockPercentage * 100 + forestPercentage * 100) lineOfGrid += "f";
                 else if (mapTile < (rockPercentage + forestPercentage + waterPercentage) * 100) lineOfGrid += "w";
                 else lineOfGrid += "-";
