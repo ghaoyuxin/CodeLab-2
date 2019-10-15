@@ -14,19 +14,19 @@ public class RandomGridScript : GridScript
 
     private void Awake()
     {
-        //make a for loop that creates a string/line
-        MakeGrid(rockPercentage, forestPercentage, waterPercentage);
-
         // Make the grid be generated into gridString at random w/ the above percentages.
+        MakeGrid(rockPercentage, forestPercentage, waterPercentage);
     }
 
     public void MakeGrid(float rockPercentage, float forestPercentage, float waterPercentage)
     {
         gridString = new string[gridHeight];
 
+
         for (int i = 0; i < gridHeight; i++)
         {
             var lineOfGrid = "";
+            //make a for loop that creates a string/line
             for (int j = 0; j < gridWidth; j++)
             {
                 var mapTile = UnityEngine.Random.Range(0, 100);
