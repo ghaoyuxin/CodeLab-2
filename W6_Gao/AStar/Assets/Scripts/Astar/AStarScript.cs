@@ -116,17 +116,17 @@ public class AStarScript : MonoBehaviour
         Debug.Log(path.pathName + " Total Score: " + (score + exploredNodes));
     }
 
-    private void AddNodesToFrontier(int x, int y) //this is important to understand
+    private void AddNodesToFrontier(int x, int y) //this is important to understand heuristics
     {
         if (x < 0 || x >= _gridWidth || y < 0 || y >= _gridHeight) return;
 
         var next = new Vector3(x, y);
         var new_cost = _costSoFar[_current] + gridScript.GetMovementCost(_pos[x, y]);
 
-        if (_costSoFar.ContainsKey(next) && !(new_cost < _costSoFar[next])) return;
+        if (_costSoFar.ContainsKey(next) && (new_cost >= _costSoFar[next])) return; // check in all the added nodes, who has the least cost, this is complex
 
-        _costSoFar[next] = new_cost;
-        var priority = new_cost + hueristic.Hueristic(x, y, _start, _goal, gridScript);
+        _costSoFar[next] = new_cost; //store value
+        var priority = new_cost + hueristic.Hueristic(x, y, _start, _goal, gridScript); //the heuristics is the step next to next step, it's like an adjustment/weight to future moves
 
         _frontier.Enqueue(next, priority);
         _cameFrom[next] = _current;
