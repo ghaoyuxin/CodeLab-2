@@ -1,23 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Model
+﻿public class Model
 {
-    public enum Players
+    public enum Piece
     {
         X,
         O,
+        Empty
     };
+    public bool hasMoved;
+    public int boardWidth = 3, boardHeight = 3;
 
-    private struct Piece
+    Piece[,] board = new Piece[,] { };
+
+    public void Initialize()
     {
-        public bool hasMoved;
-        public int moveX;
-        public int moveY;
+        board = new Piece[boardWidth, boardHeight];
+
+    }
+    public void MoveMade(int x, int y) // alternating making moves
+    {
+
 
     }
 
-    Piece[,] board = new Piece[3, 3];
+    public void CheckWinCondition()
+    {
+
+    }
 
 }
