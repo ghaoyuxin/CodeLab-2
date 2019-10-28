@@ -9,8 +9,9 @@ public class Model
         O,
         Empty
     };
-    public bool hasMoved;
+    private bool _hasMoved = false, _gridIsEmpty = true;
     public int boardWidth = 3, boardHeight = 3;
+    private string _currentPlayer;
 
     Piece[,] board = new Piece[,] { };
 
@@ -21,16 +22,29 @@ public class Model
     }
     public void MakeMove(int x, int y) // 
     {
-        //switch which game object get spawned
+        //switch which player is moving
+        if (!_hasMoved)
+        {
+            _currentPlayer = "x";
+        }
+        if (_hasMoved)
+        {
+            _currentPlayer = "o";
+        }
 
+        //check if the grid is empty
 
 
         //spawn a game object at (x, y)
-        GameObject.Instantiate(Resources.Load("X"), new Vector2(x, y), Quaternion.identity);
+
+        GameObject.Instantiate(Resources.Load(_currentPlayer), new Vector2(x, y), Quaternion.identity);
+        _hasMoved = !_hasMoved;
 
         //check win condition
         CheckWinCondition();
     }
+
+
 
     public void CheckWinCondition()
     {
