@@ -1,4 +1,7 @@
-﻿public class Model
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+public class Model
 {
     public enum Piece
     {
@@ -16,14 +19,28 @@
         board = new Piece[boardWidth, boardHeight];
 
     }
-    public void MoveMade(int x, int y) // alternating making moves
+    public void MoveMade(int x, int y) // 
     {
+        //switch which game object get spawned
 
 
+
+        //spawn a game object at (x, y)
+        for (x = 0; x < boardWidth; x++)
+        {
+            for (y = 0; y < boardHeight; y++)
+            {
+                Instantiate(Resources.Load("X"), new Vector2(x, y), Quaternion.identity);
+            }
+        }
+
+        //check win condition
+        CheckWinCondition();
     }
 
     public void CheckWinCondition()
     {
+        //check the center piece's 6 adjacent grid, if 3 is in a row, declare won
 
     }
 

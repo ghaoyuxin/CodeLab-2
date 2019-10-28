@@ -17,13 +17,9 @@ public class GameController : MonoBehaviour
 
         _model.Initialize();
 
-        for (int x = 0; x < _model.boardWidth; x++)
-        {
-            for (int y = 0; y < _model.boardHeight; y++)
-            {
-                Instantiate(Resources.Load("X"), new Vector2(x, y), Quaternion.identity);
-            }
-        }
+
+
+
 
 
 
