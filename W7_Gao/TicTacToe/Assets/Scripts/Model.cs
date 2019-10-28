@@ -19,20 +19,14 @@ public class Model
         board = new Piece[boardWidth, boardHeight];
 
     }
-    public void MoveMade(int x, int y) // 
+    public void MakeMove(int x, int y) // 
     {
         //switch which game object get spawned
 
 
 
         //spawn a game object at (x, y)
-        for (x = 0; x < boardWidth; x++)
-        {
-            for (y = 0; y < boardHeight; y++)
-            {
-                Instantiate(Resources.Load("X"), new Vector2(x, y), Quaternion.identity);
-            }
-        }
+        GameObject.Instantiate(Resources.Load("X"), new Vector2(x, y), Quaternion.identity);
 
         //check win condition
         CheckWinCondition();

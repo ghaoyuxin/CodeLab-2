@@ -16,17 +16,12 @@ public class GameController : MonoBehaviour
         _controller = new Controller();
 
         _model.Initialize();
-
-
-
-
-
-
+        _controller.Initialize();
 
     }
 
     void Update()
     {
-
+        _controller.Update();
     }
 }
