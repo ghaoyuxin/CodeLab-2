@@ -8,4 +8,8 @@ public class View
     {
         GameObject.Instantiate(Resources.Load(_currentPlayer), new Vector2(x, y), Quaternion.identity);
     }
+    public void YouWon()
+    {
+
+    }
 }

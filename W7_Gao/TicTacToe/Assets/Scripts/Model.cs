@@ -9,11 +9,12 @@ public class Model
         O = -1,
         Empty = 0
     };
-    private bool _hasMoved = false, _gridIsEmpty = true;
+    private bool _hasMoved = false;
     private int _boardWidth = 3, _boardHeight = 3;
     private string _currentPlayer;
     private Piece _currentPiece;
     private View _view;
+    private int _moveCount = 0;
 
     Piece[,] board;
 
@@ -21,24 +22,24 @@ public class Model
     {
         _view = new View();
         board = new Piece[_boardWidth, _boardHeight];
-        MonoBehaviour.print("board has initialized");
+        //MonoBehaviour.print("board has initialized");
 
     }
     public void MakeMove(int x, int y) // 
     {
-        MonoBehaviour.print("x:" + x);
-        MonoBehaviour.print("y:" + y);
+        // MonoBehaviour.print("x:" + x);
+        // MonoBehaviour.print("y:" + y);
 
         //switch which player is moving
         if (!_hasMoved)
         {
-            _currentPlayer = "x";
+            _currentPlayer = "X";
             _currentPiece = Piece.X;
 
         }
         if (_hasMoved)
         {
-            _currentPlayer = "o";
+            _currentPlayer = "O";
             _currentPiece = Piece.O;
         }
 
@@ -50,17 +51,26 @@ public class Model
             _view.Update(x, y, _currentPlayer);
             _hasMoved = !_hasMoved;
             board[x, y] = _currentPiece;
+            _moveCount++;
         }
 
         //check win condition
-        CheckWinCondition();
+        if (_moveCount >= 5) CheckWinCondition(x, y);
     }
 
 
 
-    public void CheckWinCondition()
+    public void CheckWinCondition(int x, int y)
     {
-        //check the center piece's 6 adjacent grid, if 3 is in a row, declare won
+        //check if the won condition matched with the following 8 conditions, if so declare won
+        if (board[0, 0] == board[1, 0] && board[1, 0] == board[2, 0]) MonoBehaviour.print(_currentPlayer + " Won");
+        else if (board[0, 1] == board[1, 1] && board[1, 1] == board[2, 1]) MonoBehaviour.print(_currentPlayer + " Won");
+        else if (board[0, 2] == board[1, 2] && board[1, 2] == board[2, 2]) MonoBehaviour.print(_currentPlayer + " Won");
+        else if (board[0, 0] == board[0, 1] && board[0, 1] == board[0, 2]) MonoBehaviour.print(_currentPlayer + " Won");
+        else if (board[1, 0] == board[1, 1] && board[1, 1] == board[1, 2]) MonoBehaviour.print(_currentPlayer + " Won");
+        else if (board[2, 0] == board[2, 1] && board[2, 1] == board[2, 2]) MonoBehaviour.print(_currentPlayer + " Won");
+        else if (board[0, 0] == board[1, 1] && board[1, 1] == board[2, 2]) MonoBehaviour.print(_currentPlayer + " Won");
+        else if (board[0, 2] == board[1, 1] && board[1, 1] == board[2, 0]) MonoBehaviour.print(_currentPlayer + " Won");
 
     }
 
