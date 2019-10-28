@@ -8,6 +8,7 @@ public class Controller
     public void Initialize()
     {
         _model = new Model();
+        _model.Initialize(); // have to initalize model again here, because MakeMove is called this instance of Model, otherwise the board would not be initalized.
     }
 
     public void Update()

@@ -5,40 +5,52 @@ public class Model
 {
     public enum Piece
     {
-        X,
-        O,
-        Empty
+        X = 1,
+        O = -1,
+        Empty = 0
     };
     private bool _hasMoved = false, _gridIsEmpty = true;
-    public int boardWidth = 3, boardHeight = 3;
+    private int _boardWidth = 3, _boardHeight = 3;
     private string _currentPlayer;
+    private Piece _currentPiece;
+    private View _view;
 
-    Piece[,] board = new Piece[,] { };
+    Piece[,] board;
 
     public void Initialize()
     {
-        board = new Piece[boardWidth, boardHeight];
+        _view = new View();
+        board = new Piece[_boardWidth, _boardHeight];
+        MonoBehaviour.print("board has initialized");
 
     }
     public void MakeMove(int x, int y) // 
     {
+        MonoBehaviour.print("x:" + x);
+        MonoBehaviour.print("y:" + y);
+
         //switch which player is moving
         if (!_hasMoved)
         {
             _currentPlayer = "x";
+            _currentPiece = Piece.X;
+
         }
         if (_hasMoved)
         {
             _currentPlayer = "o";
+            _currentPiece = Piece.O;
         }
 
+
         //check if the grid is empty
-
-
         //spawn a game object at (x, y)
-
-        GameObject.Instantiate(Resources.Load(_currentPlayer), new Vector2(x, y), Quaternion.identity);
-        _hasMoved = !_hasMoved;
+        if (board[x, y] == Piece.Empty)
+        {
+            _view.Update(x, y, _currentPlayer);
+            _hasMoved = !_hasMoved;
+            board[x, y] = _currentPiece;
+        }
 
         //check win condition
         CheckWinCondition();
