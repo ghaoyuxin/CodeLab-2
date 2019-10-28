@@ -1,27 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameController : MonoBehaviour
 {
     private Model _model;
     private View _view;
-    private Controller _controller;
+    public Controller _controller;
+
+    public TextMeshProUGUI gameOver;
 
 
     void Start()
     {
-        _model = new Model(); // set Model to an instance of itself
-        _view = new View();
-        _controller = new Controller();
+        // set Model to an instance of itself
 
-        _model.Initialize();
+        //put itself in the view script
+        _controller = new Controller();
         _controller.Initialize();
+        _controller._model._view.gameController = this;
 
     }
 
     void Update()
     {
         _controller.Update();
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 }

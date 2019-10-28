@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Controller
 {
-    private Model _model;
+    public Model _model;
     public void Initialize()
     {
         _model = new Model();
