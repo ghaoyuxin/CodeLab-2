@@ -15,7 +15,7 @@ function love.load()
   -- One meter is 32px in physics engine
   love.physics.setMeter(15)
   -- Create a world with standard gravity
-  world = love.physics.newWorld(0, 9.81*15, true)
+  world = love.physics.newWorld(0, 13*15, true) --changed the gravity to feel less floaty
 
   background=love.graphics.newImage('media/iPadMenu_atlas0.png')
   --Make nearest neighbor, so pixels are sharp
@@ -96,14 +96,15 @@ function love.load()
   currentAnim = inAirAnim
 
   music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
-  music:setVolume(0.1)
+  music:setVolume(0.01)
   love.audio.play(music)
 
   runSound = love.audio.newSource("media/foot1.mp3", "static")
   runSound:setLooping(true);
 
 
-  shape = love.physics.newRectangleShape(450, 500, 100, 100)
+  shape = love.physics.newRectangleShape(450, 500, 100, 100) --what this is for?
+
 end
 
 function love.update(dt)
@@ -111,12 +112,12 @@ function love.update(dt)
   currentAnim:update(dt)
   world:update(dt)
 
-  building1:update(body, dt, building2)
+  building1:update(body, dt, building2) -- what is this 2 lines for? why they are cross referencing?
   building2:update(body, dt, building1)
 
   updateTilesetBatch()
 
-  if(time < love.timer.getTime( ) - 0.25) and currentAnim == jumpAnim then
+  if(time < love.timer.getTime( ) - 0.25) and currentAnim == jumpAnim then --what does this line mean? 0.25 frame or seconds?
     currentAnim = inAirAnim
     currentAnim:gotoFrame(1)
   end
@@ -128,9 +129,9 @@ function love.update(dt)
 
   if(currentAnim == runAnim) then
     --print("ON GROUND")
-    body:applyLinearImpulse(250 * dt, 0)
+    body:applyLinearImpulse(250 * dt, 0) --is this on addition to 1000 linear impulse
   else
-    body:applyLinearImpulse(100 * dt, 0)
+    body:applyLinearImpulse(100 * dt, 0) 
   end
 end
 
@@ -139,7 +140,7 @@ function love.draw()
   love.graphics.setColor(255, 255, 255)
   love.graphics.print(text, 10, 10)
 
-  love.graphics.translate(width/2 - body:getX(), 0)
+  love.graphics.translate(width/2 - body:getX(), 0) --translate the 3 dimensional coordinate system into 2 dimension??
    
   currentAnim:draw(playerImg, body:getX(), body:getY(), body:getAngle())
 
@@ -151,7 +152,7 @@ function love.draw()
   love.graphics.draw(tilesetBatch, 0, 0, 0, 1, 1)
 end
 
-function updateTilesetBatch()
+function updateTilesetBatch()  --draw new tile positions every frame
   tilesetBatch:clear()
 
   tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
@@ -163,8 +164,8 @@ function updateTilesetBatch()
 end
 
 function love.keypressed( key, isrepeat )
-  if key == "up" and onGround then
-    body:applyLinearImpulse(0, -500)
+  if key == "space" and onGround then
+    body:applyLinearImpulse(0, -600) -- can changed this to jump higher
     currentAnim = jumpAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
@@ -176,18 +177,19 @@ function beginContact(bodyA, bodyB, coll)
   local aData=bodyA:getUserData()
   local bData =bodyB:getUserData()
 
-  cx,cy = coll:getNormal()
+  cx,cy = coll:getNormal() --get normal's x, y coordinate
   text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
   print (text)
 
-  if(aData == "Player" or bData == "Player") then
-
+  if(aData == "Player" or bData == "Player") then 
     onGround = true
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-    runSound:play()
+    if (cy > 0) then --play sound only when collide with building surface
+      runSound:play()
+    end
 
   end
 end
