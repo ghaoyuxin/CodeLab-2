@@ -96,7 +96,7 @@ function love.load()
   currentAnim = inAirAnim
 
   music = love.audio.newSource("media/18-machinae_supremacy-lord_krutors_dominion.mp3", "stream")
-  music:setVolume(0.01)
+  music:setVolume(0.1)
   love.audio.play(music)
 
   runSound = love.audio.newSource("media/foot1.mp3", "static")
@@ -104,6 +104,9 @@ function love.load()
 
 
   shape = love.physics.newRectangleShape(450, 500, 100, 100) --what this is for?
+
+  --play bg music
+
 
 end
 
@@ -133,7 +136,8 @@ function love.update(dt)
   else
     body:applyLinearImpulse(100 * dt, 0) 
   end
-  if(body:getY()> height) then --die when player fall out of the screen
+  if(body:getY()> height) then --restart when player fall out of the screen
+      love.audio.stop(music)
       restartGame()
   end
   
@@ -159,12 +163,12 @@ end
 function updateTilesetBatch()  --draw new tile positions every frame
   tilesetBatch:clear()
 
-  tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle());
+  tilesetBatch:add(tileQuads[0], crate_body:getX(), crate_body:getY(), crate_body:getAngle()); --draw 1 crate, how do I draw a bunch??
 
   building1:draw(tilesetBatch, tileQuads);
   building2:draw(tilesetBatch, tileQuads);
 
-  tilesetBatch:flush()
+  tilesetBatch:flush() --Immediately renders any pending automatically batched draws
 end
 
 function love.keypressed( key, isrepeat )
