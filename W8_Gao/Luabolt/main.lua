@@ -13,9 +13,9 @@ function love.load()
   love.window.setTitle("Luabalt")
 
   -- One meter is 32px in physics engine
-  love.physics.setMeter(15)
+  love.physics.setMeter(16)
   -- Create a world with standard gravity
-  world = love.physics.newWorld(0, 13*15, true) --changed the gravity to feel less floaty
+  world = love.physics.newWorld(0, 13*16, true) --changed the gravity to feel less floaty
 
   background=love.graphics.newImage('media/iPadMenu_atlas0.png')
   --Make nearest neighbor, so pixels are sharp
@@ -138,7 +138,7 @@ function love.update(dt)
   end
   if(body:getY()> height) then --restart when player fall out of the screen
       love.audio.stop(music)
-      restartGame()
+      love.load()
   end
   
 end
@@ -189,14 +189,13 @@ function beginContact(bodyA, bodyB, coll)
   text = text.."\n"..aData.." colliding with "..bData.." with a vector normal of: "..cx..", "..cy
 
   print (text)
-
-  if(aData == "Player" or bData == "Player") then 
+  if (cy ~= 0) then --play sound only when collide with building surface， also don't allow jump when collide with building side
+    if(aData == "Player" or bData == "Player") then 
     onGround = true
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-    if (cy ~= 0) then --play sound only when collide with building surface
-      runSound:play()
+    runSound:play()
     end
   end
 end
@@ -211,10 +210,6 @@ function endContact(bodyA, bodyB, coll)
   if(aData == "Player" or bData == "Player") then
     runSound:stop();
   end
-end
-
-function restartGame() -- added function to restart game
-    love.load()
 end
 
 function love.focus(f)
