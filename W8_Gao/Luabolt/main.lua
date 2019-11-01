@@ -133,6 +133,10 @@ function love.update(dt)
   else
     body:applyLinearImpulse(100 * dt, 0) 
   end
+  if(body:getY()> height) then --die when player fall out of the screen
+      restartGame()
+  end
+  
 end
 
 function love.draw()
@@ -187,10 +191,9 @@ function beginContact(bodyA, bodyB, coll)
     currentAnim = rollAnim
     currentAnim:gotoFrame(1)
     time = love.timer.getTime( )
-    if (cy > 0) then --play sound only when collide with building surface
+    if (cy ~= 0) then --play sound only when collide with building surface
       runSound:play()
     end
-
   end
 end
 
@@ -206,6 +209,10 @@ function endContact(bodyA, bodyB, coll)
   end
 end
 
+function restartGame() -- added function to restart game
+    love.load()
+end
+
 function love.focus(f)
   if not f then
     print("LOST FOCUS")
@@ -215,5 +222,5 @@ function love.focus(f)
 end
 
 function love.quit()
-  print("Thanks for playing! Come back soon!")
+  print("Thanks for playing! Come back soon!") -- I would never read this message right?
 end
