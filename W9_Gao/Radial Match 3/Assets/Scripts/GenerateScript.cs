@@ -31,6 +31,5 @@ public class GenerateScript : MonoBehaviour
             GameObject dot = Instantiate(dotToGenerate, newPos, Quaternion.identity);
             dot.transform.SetParent(parent);
         }
-
     }
 }

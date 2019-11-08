@@ -18,8 +18,8 @@ public class RotateScript : MonoBehaviour
         _currentEulerAngle = rotateRing.eulerAngles.z;
         if (!_coroutineIsRunning)
         {
-            _coroutineIsRunning = true;
             StartCoroutine(lerpToRotation());
+            _coroutineIsRunning = true;
         }
         else return;
     }
