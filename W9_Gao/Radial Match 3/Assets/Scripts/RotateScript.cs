@@ -22,7 +22,6 @@ public class RotateScript : MonoBehaviour
             StartCoroutine(lerpToRotation());
         }
         else return;
-        //call check match
     }
 
     IEnumerator lerpToRotation()
