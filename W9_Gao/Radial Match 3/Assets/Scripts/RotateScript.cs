@@ -8,20 +8,17 @@ public class RotateScript : MonoBehaviour
     public int rotateDirection = 0;
     public Transform rotateRing;
     private float _currentEulerAngle;
-    private bool _coroutineIsRunning = false;
-
-
+    private bool _isRotating = false;
 
     private void OnMouseDown()
     {
         //rotateRing.transform.Rotate(0, 0, rotateAngle * rotateDirection, Space.Self);
-        if (!_coroutineIsRunning)
+        if (!_isRotating)
         {
             _currentEulerAngle = rotateRing.eulerAngles.z;
             StartCoroutine(lerpToRotation());
-            _coroutineIsRunning = true;
+            _isRotating = true;
         }
-        //else return;//this part not working
     }
 
     IEnumerator lerpToRotation()
@@ -34,7 +31,7 @@ public class RotateScript : MonoBehaviour
             float angle = Mathf.LerpAngle(_currentEulerAngle, _currentEulerAngle + rotateAngle * rotateDirection, t);
             rotateRing.transform.eulerAngles = new Vector3(0, 0, angle);
             Debug.Log(t);
-            if (t >= 1) _coroutineIsRunning = false;
+            if (t >= 1) _isRotating = false;
             yield return null;
         }
 
