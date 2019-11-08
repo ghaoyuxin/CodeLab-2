@@ -7,34 +7,26 @@ public class CheckMatch : MonoBehaviour
     private int _blueTag = 0, _greenTag = 0, _orangeTag = 0, _purpleTag = 0;
     private List<Collider2D> TriggerList = new List<Collider2D>();
 
+    int matchCount = 0;
+
+
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!TriggerList.Contains(other))
+        matchCount = 0;
+        if (!TriggerList.Contains(other)) TriggerList.Add(other);
+        for (int i = 0; i < TriggerList.Count - 1; i++)
         {
-            //add the object to the list
-            TriggerList.Add(other);
+            if (TriggerList[i].tag == TriggerList[i + 1].tag) matchCount++;
         }
-
-        if (TriggerList.Count == 3)
-        {
-            if (TriggerList[0] == TriggerList[1] && TriggerList[0] == TriggerList[2]) Destroy(other.gameObject);
-            else return;
-        }
-
-
+        if (matchCount == 2) print("found a match");
 
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        //if the object is in the list
-        if (TriggerList.Contains(other))
-        {
-            //remove it from the list
-            TriggerList.Remove(other);
-            print(TriggerList);
-        }
+        if (TriggerList.Contains(other)) TriggerList.Remove(other);
     }
 
     // if (other.gameObject.CompareTag("blue"))
