@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8912113801517162048}
   - component: {fileID: 4225332385830764226}
-  - component: {fileID: 6182623815513508997}
+  - component: {fileID: -2992584754915973328}
   m_Layer: 0
   m_Name: blue
   m_TagString: blue
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4325705002198453126}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.843399, y: -10.010129, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.11, y: 0.11, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &6182623815513508997
+--- !u!58 &-2992584754915973328
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

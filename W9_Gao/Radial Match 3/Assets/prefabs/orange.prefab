@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6081694754984978100}
   - component: {fileID: 6463566804778954283}
-  - component: {fileID: 5193733749443180226}
+  - component: {fileID: -3665592221123788329}
   m_Layer: 0
   m_Name: orange
   m_TagString: orange
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2988118378018581277}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.56172, y: 0.44059515, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.11, y: 0.11, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &5193733749443180226
+--- !u!58 &-3665592221123788329
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
