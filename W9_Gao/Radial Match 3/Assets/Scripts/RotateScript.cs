@@ -11,5 +11,6 @@ public class RotateScript : MonoBehaviour
     private void OnMouseDown()
     {
         rotateRing.transform.Rotate(0, 0, rotateAngle * rotateDirection, Space.Self);
+        //call check match
     }
 }
