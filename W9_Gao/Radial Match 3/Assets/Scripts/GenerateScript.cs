@@ -11,6 +11,7 @@ public class GenerateScript : MonoBehaviour
     public Transform innerRing;
     public Transform middleRing;
     public Transform outerRing;
+    public SpriteRenderer foundMatch;
     [HideInInspector]
     private GameObject[] dotPrefabs;
 
@@ -53,5 +54,8 @@ public class GenerateScript : MonoBehaviour
             GenerateDots(1.5f, 6, 0, middleRing);
             GenerateDots(2.4f, 12, 0, outerRing);
         }
+
+        if (ServiceLocators.foundAMatch) foundMatch.enabled = true;
+        if (!ServiceLocators.foundAMatch) foundMatch.enabled = false;
     }
 }

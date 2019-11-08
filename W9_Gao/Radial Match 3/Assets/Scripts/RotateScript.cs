@@ -13,6 +13,7 @@ public class RotateScript : MonoBehaviour
     private void OnMouseDown()
     {
         //rotateRing.transform.Rotate(0, 0, rotateAngle * rotateDirection, Space.Self);
+        ServiceLocators.foundAMatch = false;
         if (!_isRotating)
         {
             _currentEulerAngle = rotateRing.eulerAngles.z;

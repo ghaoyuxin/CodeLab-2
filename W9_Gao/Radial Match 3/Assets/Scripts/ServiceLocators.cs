@@ -5,4 +5,5 @@ using UnityEngine;
 public class ServiceLocators
 {
     public static bool readyToRepopulate;
+    public static bool foundAMatch = false;
 }

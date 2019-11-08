@@ -34,14 +34,14 @@ public class CheckMatch : MonoBehaviour
         if (matchCount == 2)
         {
             print("found a match");
+            ServiceLocators.foundAMatch = true;
 
             //get transform of dots that's going to be removed
 
-            for (int i = 0; i < MatchList.Count; i++)
-            {
-                //instantiate them but deactivate them
-                Repopulate(MatchList[i].transform);
-            }
+            // for (int i = 0; i < MatchList.Count; i++)
+            // {
+            //     Repopulate(MatchList[i].transform);
+            // }
 
             StartCoroutine(RemoveMatches());
         }
@@ -58,7 +58,6 @@ public class CheckMatch : MonoBehaviour
         for (int i = 0; i < MatchList.Count; i++)
         {
             Destroy(MatchList[i]);
-            ActivateDots();
         }
     }
 
@@ -68,18 +67,5 @@ public class CheckMatch : MonoBehaviour
 
         GameObject dotRepopulated = Instantiate(dotToRepopulate, dot.position, Quaternion.identity);
         dotRepopulated.transform.SetParent(dot.parent);
-
-        if (!RepopulateList.Contains(dotRepopulated)) RepopulateList.Add(dotRepopulated);
-
-        dotRepopulated.SetActive(false);
     }
-
-    private void ActivateDots()
-    {
-        for (int i = 0; i < RepopulateList.Count; i++)
-        {
-            RepopulateList[i].SetActive(true);
-        }
-    }
-
 }
