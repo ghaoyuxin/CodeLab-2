@@ -7,12 +7,14 @@ public class RotateScript : MonoBehaviour
     public int rotateAngle = 0;
     public int rotateDirection = 0;
     public Transform rotateRing;
-    private int _targetEulerAngle;
+    private float _currentEulerAngle;
+
+
 
     private void OnMouseDown()
     {
-        //_targetEulerAngle = rotateAngle * rotateDirection;
         //rotateRing.transform.Rotate(0, 0, rotateAngle * rotateDirection, Space.Self);
+        _currentEulerAngle = rotateRing.eulerAngles.z;
         StartCoroutine(lerpToRotation());
         //call check match
     }
@@ -25,7 +27,8 @@ public class RotateScript : MonoBehaviour
         {
             t += Time.deltaTime;
             print(t);
-            rotateRing.transform.Rotate(0, 0, Mathf.LerpAngle(0, rotateAngle * rotateDirection, t), Space.Self);
+            float angle = Mathf.LerpAngle(_currentEulerAngle, _currentEulerAngle + rotateAngle * rotateDirection, t);
+            rotateRing.transform.eulerAngles = new Vector3(0, 0, angle);
             yield return null;
         }
 
