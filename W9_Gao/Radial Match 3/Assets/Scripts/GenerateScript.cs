@@ -14,7 +14,7 @@ public class GenerateScript : MonoBehaviour
     {
         for (int i = 0; i < numberOfDots; i++)
         {
-            float angle = angleOffset + i * Mathf.PI * 2f / numberOfDots;
+            float angle = angleOffset * Mathf.Deg2Rad + i * Mathf.PI * 2f / numberOfDots;
             Vector3 newPos = new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
             GameObject ring = Instantiate(blue, newPos, Quaternion.identity);
         }

@@ -56,7 +56,7 @@ function building:draw(tilesetBatch, tileQuads)
   for x=self.width - 1, 0, -1 do 
     for y=0,self.height - 1, 1 do
       if x == 0 and y == 0 then
-        tilesetBatch:add(tileQuads[1], x1 + x * tileSize, y1 + y * tileSize, 0) --don't understand this part
+        tilesetBatch:add(tileQuads[1], x1 + x * tileSize, y1 + y * tileSize, 0) --I don't understand this part
       else
         if y == 0 and x == self.width - 1 then
           tilesetBatch:add(tileQuads[3], x1 + x * tileSize, y1 + y * tileSize, 0)
