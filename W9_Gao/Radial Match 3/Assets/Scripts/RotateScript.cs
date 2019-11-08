@@ -8,6 +8,7 @@ public class RotateScript : MonoBehaviour
     public int rotateDirection = 0;
     public Transform rotateRing;
     private float _currentEulerAngle;
+    private bool _coroutineIsRunning = false;
 
 
 
@@ -15,7 +16,12 @@ public class RotateScript : MonoBehaviour
     {
         //rotateRing.transform.Rotate(0, 0, rotateAngle * rotateDirection, Space.Self);
         _currentEulerAngle = rotateRing.eulerAngles.z;
-        StartCoroutine(lerpToRotation());
+        if (!_coroutineIsRunning)
+        {
+            _coroutineIsRunning = true;
+            StartCoroutine(lerpToRotation());
+        }
+        else return;
         //call check match
     }
 
@@ -25,12 +31,11 @@ public class RotateScript : MonoBehaviour
 
         while (t < 1)
         {
-            t += Time.deltaTime;
-            print(t);
+            t += Time.deltaTime * 2;
             float angle = Mathf.LerpAngle(_currentEulerAngle, _currentEulerAngle + rotateAngle * rotateDirection, t);
             rotateRing.transform.eulerAngles = new Vector3(0, 0, angle);
             yield return null;
         }
-
+        _coroutineIsRunning = false;
     }
 }
