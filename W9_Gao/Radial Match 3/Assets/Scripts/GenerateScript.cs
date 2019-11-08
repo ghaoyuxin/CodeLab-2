@@ -12,7 +12,7 @@ public class GenerateScript : MonoBehaviour
     public Transform middleRing;
     public Transform outerRing;
     [HideInInspector]
-    public GameObject[] dotPrefabs;
+    private GameObject[] dotPrefabs;
 
     private void Start()
     {
@@ -53,15 +53,5 @@ public class GenerateScript : MonoBehaviour
             GenerateDots(1.5f, 6, 0, middleRing);
             GenerateDots(2.4f, 12, 0, outerRing);
         }
-    }
-
-
-    private void Repopulate(Transform dot)
-    {
-
-        GameObject dotToRepopulate = dotPrefabs[Random.Range(0, dotPrefabs.Length)];
-
-        GameObject dotRepopulated = Instantiate(dotToRepopulate, dot.position, Quaternion.identity);
-        dotRepopulated.transform.SetParent(dot.parent);
     }
 }

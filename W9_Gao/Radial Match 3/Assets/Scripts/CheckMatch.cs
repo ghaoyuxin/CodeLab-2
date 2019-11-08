@@ -6,6 +6,13 @@ public class CheckMatch : MonoBehaviour
 {
     private List<Collider2D> TriggerList = new List<Collider2D>();
     private List<GameObject> MatchList = new List<GameObject>();
+    private List<GameObject> RepopulateList = new List<GameObject>();
+    private GameObject[] dotPrefabs2;
+
+    private void Start()
+    {
+        dotPrefabs2 = Resources.LoadAll<GameObject>("");
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -28,6 +35,14 @@ public class CheckMatch : MonoBehaviour
         {
             print("found a match");
 
+            //get transform of dots that's going to be removed
+
+            for (int i = 0; i < MatchList.Count; i++)
+            {
+                //instantiate them but deactivate them
+                Repopulate(MatchList[i].transform);
+            }
+
             StartCoroutine(RemoveMatches());
         }
     }
@@ -43,6 +58,27 @@ public class CheckMatch : MonoBehaviour
         for (int i = 0; i < MatchList.Count; i++)
         {
             Destroy(MatchList[i]);
+            ActivateDots();
+        }
+    }
+
+    private void Repopulate(Transform dot)
+    {
+        GameObject dotToRepopulate = dotPrefabs2[Random.Range(0, dotPrefabs2.Length)];
+
+        GameObject dotRepopulated = Instantiate(dotToRepopulate, dot.position, Quaternion.identity);
+        dotRepopulated.transform.SetParent(dot.parent);
+
+        if (!RepopulateList.Contains(dotRepopulated)) RepopulateList.Add(dotRepopulated);
+
+        dotRepopulated.SetActive(false);
+    }
+
+    private void ActivateDots()
+    {
+        for (int i = 0; i < RepopulateList.Count; i++)
+        {
+            RepopulateList[i].SetActive(true);
         }
     }
 
