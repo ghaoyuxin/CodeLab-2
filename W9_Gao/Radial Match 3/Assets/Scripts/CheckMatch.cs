@@ -10,7 +10,7 @@ public class CheckMatch : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         int matchCount = 0;
-        MatchList.Clear();
+        MatchList.Clear(); //clear Matchlist and start over
         if (!TriggerList.Contains(other)) TriggerList.Add(other);
         for (int i = 0; i < TriggerList.Count - 1; i++)
         {
@@ -35,7 +35,6 @@ public class CheckMatch : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         if (TriggerList.Contains(other)) TriggerList.Remove(other);
-        //if (MatchList.Contains(other.gameObject)) MatchList.Remove(other.gameObject);
     }
 
     private IEnumerator RemoveMatches()

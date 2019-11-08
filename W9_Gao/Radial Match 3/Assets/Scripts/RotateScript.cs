@@ -21,7 +21,7 @@ public class RotateScript : MonoBehaviour
             StartCoroutine(lerpToRotation());
             _coroutineIsRunning = true;
         }
-        else return;
+        //else return;//this part not working
     }
 
     IEnumerator lerpToRotation()
@@ -35,6 +35,6 @@ public class RotateScript : MonoBehaviour
             rotateRing.transform.eulerAngles = new Vector3(0, 0, angle);
             yield return null;
         }
-        _coroutineIsRunning = false;
+
     }
 }
