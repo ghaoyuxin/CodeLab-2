@@ -16,7 +16,7 @@ public class GenerateScript : MonoBehaviour
     private void Start()
     {
         dotList = Resources.LoadAll<GameObject>("");
-        GenerateDots(0.55f, 3, 60, innerRing);//inner ring
+        GenerateDots(0.55f, 3, 60, innerRing);//inner ring, the radius is tested out from the scene
         GenerateDots(1.5f, 6, 0, middleRing);//middle ring
         GenerateDots(2.4f, 12, 0, outerRing);//outer ring
 
