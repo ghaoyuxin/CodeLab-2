@@ -233,6 +233,7 @@ MonoBehaviour:
   innerRing: {fileID: 1457124443}
   middleRing: {fileID: 1084799728}
   outerRing: {fileID: 377724187}
+  foundMatch: {fileID: 1238810016}
 --- !u!4 &245702188
 Transform:
   m_ObjectHideFlags: 0
@@ -779,7 +780,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: db94d9546454743fe8364e5efc63b6fa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1601,7 +1602,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: fff39dd46eaae47fdb85708e92ab3481, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

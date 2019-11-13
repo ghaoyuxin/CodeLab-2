@@ -31,10 +31,9 @@ public class RotateScript : MonoBehaviour
             t += Time.deltaTime * 2;
             float angle = Mathf.LerpAngle(_currentEulerAngle, _currentEulerAngle + rotateAngle * rotateDirection, t);
             rotateRing.transform.eulerAngles = new Vector3(0, 0, angle);
-            //Debug.Log(t);
-            if (t >= 1) _isRotating = false;
+            //Debug.Log(t);    
             yield return null;
         }
-
+        if (t >= 1) _isRotating = false;
     }
 }
