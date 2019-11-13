@@ -11,20 +11,57 @@
 //-test by drawing a green background
 
 //STEP3: host my project on a server
-//- add package Atom live server -test
-//download Web Server for Chrome, a chrome extension allow you to host your project
-//select your project foler, now click on the URL to open my webpage
+//- add package Atom live server -open live server from packages, test
+
+//STEP4: Complier
+//open -chrome -view -developer -javascript console for checking error messages
+//settings: disable cache while DevsTool is open
 
 //STEP4: connect p5.play with my project
 //-copy p5.play.js	script into libraries folder - add this line to index.html <script src="libraries/p5.play.js" type="text/javascript"></script>
 //-test by drawing a sprite
 
+//STEP%: setup postNet library in the project
+
+let video;
+let poseNet;
+let noseX = 0;
+let noseY = 0;
+let eyelX = 0;
+let eyelY = 0;
+
 function setup() {
-  createCanvas(800,400);
-  createSprite(400, 200, 50, 50);
+  createCanvas(640, 480);
+  video = createCapture(VIDEO);
+  video.hide();
+  poseNet = ml5.poseNet(video, modelReady);
+  poseNet.on('pose', gotPoses);
+}
+
+function gotPoses(poses) {
+  // console.log(poses);
+  if (poses.length > 0) {
+    let nX = poses[0].pose.keypoints[0].position.x;
+    let nY = poses[0].pose.keypoints[0].position.y;
+    let eX = poses[0].pose.keypoints[1].position.x;
+    let eY = poses[0].pose.keypoints[1].position.y;
+    noseX = lerp(noseX, nX, 0.5);
+    noseY = lerp(noseY, nY, 0.5);
+    eyelX = lerp(eyelX, eX, 0.5);
+    eyelY = lerp(eyelY, eY, 0.5);
+  }
+}
+
+function modelReady() {
+  console.log('model ready');
 }
 
 function draw() {
-  background(255,255,255);
-  drawSprites();
+  image(video, 0, 0);
+
+  let d = dist(noseX, noseY, eyelX, eyelY);
+
+  fill(255, 0, 0);
+  ellipse(noseX, noseY, d);
+
 }
