@@ -1,67 +1,199 @@
-//STEP1: setup a local project folder on my desktop
-//install node
-//- go to website https://nodejs.org/en/download/ - test by open Terminal and type "node", if it returns ">" then it is working, node will allow me to use npm install p5-manager
-//install p5-manager via npm
-//-open terminal -"sudo npm install p5-manager -g" -test by type "p5" I should see a welcome message
-//great,now setup a project folder on desktop
-//-in terminal, nagivate to the directory - "p5 generate -b BouncyTime" //it will generate a folder with a HTML, a sketch.js, a libraries folder
 
-//STEP2: install editor
-//Atom
-//-test by drawing a green background
+//plan:
+//call event when both wrists are higher than 2/3 of the screen height
 
-//STEP3: host my project on a server
-//- add package Atom live server -open live server from packages, test
-
-//STEP4: Complier
-//open -chrome -view -developer -javascript console for checking error messages
-//settings: disable cache while DevsTool is open
-
-//STEP4: connect p5.play with my project
-//-copy p5.play.js	script into libraries folder - add this line to index.html <script src="libraries/p5.play.js" type="text/javascript"></script>
-//-test by drawing a sprite
-
-//STEP%: setup postNet library in the project
 
 let video;
 let poseNet;
-let noseX = 0;
-let noseY = 0;
-let eyelX = 0;
-let eyelY = 0;
+let poses = [];
+let singlePose;
+let getFrame = true;
+let backgroundColor = 'rgba(255, 201, 207, 0.05)';
+let options = {
+  imageScaleFactor: 0.3,
+  outputStride: 16,
+  flipHorizontal: true,
+  minConfidence: 0.5,
+  maxPoseDetections: 1,
+  scoreThreshold: 0.5,
+  nmsRadius: 20,
+  detectionType: 'multiple',
+  multiplier: 0.75,
+}
+let mySound1, mySound2;
+let volumeValue = 0.2;
+
+let ring1, ring2, dress;
+let ring_sprite, dress_sprite;
+
+let dressCreated = false;
+let sound2Played = false;
+
+let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
+let startdance = false;
+
+var h = 0;//the height of the moving dress
+
+function preload(){
+  mySound1 = loadSound('music1.ogg');
+  mySound2 = loadSound('music2.ogg');
+}
 
 function setup() {
   createCanvas(640, 480);
-  video = createCapture(VIDEO);
-  video.hide();
-  poseNet = ml5.poseNet(video, modelReady);
-  poseNet.on('pose', gotPoses);
-}
 
-function gotPoses(poses) {
-  // console.log(poses);
-  if (poses.length > 0) {
-    let nX = poses[0].pose.keypoints[0].position.x;
-    let nY = poses[0].pose.keypoints[0].position.y;
-    let eX = poses[0].pose.keypoints[1].position.x;
-    let eY = poses[0].pose.keypoints[1].position.y;
-    noseX = lerp(noseX, nX, 0.5);
-    noseY = lerp(noseY, nY, 0.5);
-    eyelX = lerp(eyelX, eX, 0.5);
-    eyelY = lerp(eyelY, eY, 0.5);
-  }
+
+  // Video
+  video = createCapture(VIDEO);
+  video.size(width, height);
+  video.hide();
+
+
+  // Handle PoseNet
+  poseNet = ml5.poseNet(video, options, modelReady);
+  poseNet.on('pose', function(results) {
+    if (getFrame) {
+      poses = results;
+    }
+    getFrame = !getFrame;
+  });
+
+  //sound
+  mySound1.loop();
+
+  //sprite
+  ring1 = loadImage('assets/ring.png');
+  ring2 = loadImage('assets/ring2.png');
+  dress = loadImage('assets/dress.png');
+  ring_sprite = createSprite(220,25); //x, y position, x, y dimension (optional)
+  ring_sprite_2 = createSprite(420,25);
+  ring_sprite.addImage(ring1);
+  ring_sprite_2.addImage(ring1);
+
 }
 
 function modelReady() {
-  console.log('model ready');
+  //select('#status').style('display: none');
+  console.log('Model ready');
 }
 
 function draw() {
-  image(video, 0, 0);
+    background(backgroundColor);
+    drawVideo();
+    singlePose = poses[0];
+    drawCustomPoints(poses);
+    mySound1.setVolume(volumeValue);
 
-  let d = dist(noseX, noseY, eyelX, eyelY);
+    drawSprites();
 
-  fill(255, 0, 0);
-  ellipse(noseX, noseY, d);
+    if(startdance)
+    {
+      drawPalmmy();
+    }
 
+  }
+
+function drawCustomPoints(poses) {
+  //let singlePose = poses[0];
+  if (singlePose) {
+    drawTextAtPoint(singlePose.pose.leftWrist, '', 50);
+    drawTextAtPoint(singlePose.pose.rightWrist, '', 50);
+    volumeValue = singlePose.pose.leftWrist.y / height;
+    volumeValue = 1 - volumeValue;
+
+    if(volumeValue > 0.5){
+      ring_sprite.addImage(ring2);
+      ring_sprite_2.addImage(ring2);
+    }
+
+    if(volumeValue > 0.75){
+        console.log('ready to move dress');
+        if(!dressCreated) drawDress();
+        moveDressDown();
+
+        //stop looping music
+      }
+    }
+  }
+
+function drawDress(){
+    dressCreated = true;
+    // dress_sprite = createSprite(270,0);
+    // dress_sprite.addImage(dress);
+    targetDressHeight = singlePose.pose.rightShoulder.y;
+
+}
+
+
+function moveDressDown(){
+
+    if(h < targetDressHeight){
+      h++;
+      console.log(h);
+      push();
+      translate(270,h);
+      noStroke();
+      rect(0,0,100,200);
+      pop();
+    }
+
+    else if(!sound2Played && h >= targetDressHeight){
+      console.log('dress into position');
+      removeSprite(ring_sprite);
+      removeSprite(ring_sprite_2);
+      mySound2.loop();
+      mySound1.stop();
+      gotPoses(poses);
+      sound2Played = true;
+    }
+}
+
+function gotPoses(poses){
+  //console.log(poses);
+  if(poses.length > 0){
+
+    let lsX = poses[0].pose.keypoints[5].position.x;
+    let lsY = poses[0].pose.keypoints[5].position.y;
+    leftShoulderX = lerp(leftShoulderX, lsX, 0.5);
+    leftShoulderY = lerp(leftShoulderY, lsY, 0.5);
+
+    let rsX = poses[0].pose.keypoints[6].position.x;
+    let rsY = poses[0].pose.keypoints[6].position.y;
+    rightShoulderX = lerp(rightShoulderX, rsX, 0.5);
+    rightShoulderY = lerp(rightShoulderY, rsY, 0.5);
+
+  }
+  startdance = true;
+}
+
+  function drawPalmmy(){
+  let diameter = dist(leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY);
+  ellipse((leftShoulderX+rightShoulderX)/2, (leftShoulderY+rightShoulderY)/2, diameter);
+  // dress_sprite = createSprite(270,0);
+  // dress_sprite.addImage(dress);
+  imageMode(CENTER);
+  //image(palmmy, leftShoulderX+100, leftShoulderY+100, 320*diameter*0.018, 290*diameter*0.018);
+
+  // dress_sprite.position(leftShoulderX, leftShoulderY);
+  // dress_sprite.size(diameter*2, diameter*2);
+
+}
+
+
+function drawVideo() {
+  push();
+  translate(width, 0);
+  scale(-1, 1);
+  image(video, 0, 0, width, height);
+  pop();
+}
+
+function drawTextAtPoint(point, theText, size) {
+  if (point.confidence > 0.2) {
+    textSize(size);
+    textAlign(CENTER);
+    fill(240, 240, 240);
+    noStroke();
+    text(theText, point.x, point.y);
+  }
 }
