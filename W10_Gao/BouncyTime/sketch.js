@@ -1,8 +1,4 @@
 
-//plan:
-//call event when both wrists are higher than 2/3 of the screen height
-
-
 let video;
 let poseNet;
 let poses = [];
@@ -34,20 +30,18 @@ let startdance = false;
 
 var h = 0;//the height of the moving dress
 
-function preload(){
-  mySound1 = loadSound('music1.ogg');
-  mySound2 = loadSound('music2.ogg');
-}
+
 
 function setup() {
   createCanvas(640, 480);
-
-
   // Video
   video = createCapture(VIDEO);
   video.size(width, height);
   video.hide();
 
+  //load sound
+  mySound1 = loadSound('assets/music1.ogg', loaded);
+  mySound2 = loadSound('assets/music2.ogg');
 
   // Handle PoseNet
   poseNet = ml5.poseNet(video, options, modelReady);
@@ -58,9 +52,6 @@ function setup() {
     getFrame = !getFrame;
   });
 
-  //sound
-  mySound1.loop();
-
   //sprite
   ring1 = loadImage('assets/ring.png');
   ring2 = loadImage('assets/ring2.png');
@@ -70,6 +61,10 @@ function setup() {
   ring_sprite.addImage(ring1);
   ring_sprite_2.addImage(ring1);
 
+}
+
+function loaded() {
+  mySound1.loop();
 }
 
 function modelReady() {
@@ -86,12 +81,20 @@ function draw() {
 
     drawSprites();
 
-    if(startdance)
-    {
+    if(startdance){
       drawPalmmy();
     }
+}
 
+function drawVideo() {
+    push();
+    translate(width, 0);
+    scale(-1, 1);
+    image(video, 0, 0, width, height);
+    pop();
   }
+
+
 
 function drawCustomPoints(poses) {
   //let singlePose = poses[0];
@@ -115,6 +118,16 @@ function drawCustomPoints(poses) {
       }
     }
   }
+
+function drawTextAtPoint(point, theText, size) {
+      if (point.confidence > 0.2) {
+        textSize(size);
+        textAlign(CENTER);
+        fill(240, 240, 240);
+        noStroke();
+        text(theText, point.x, point.y);
+      }
+}
 
 function drawDress(){
     dressCreated = true;
@@ -177,23 +190,4 @@ function gotPoses(poses){
   // dress_sprite.position(leftShoulderX, leftShoulderY);
   // dress_sprite.size(diameter*2, diameter*2);
 
-}
-
-
-function drawVideo() {
-  push();
-  translate(width, 0);
-  scale(-1, 1);
-  image(video, 0, 0, width, height);
-  pop();
-}
-
-function drawTextAtPoint(point, theText, size) {
-  if (point.confidence > 0.2) {
-    textSize(size);
-    textAlign(CENTER);
-    fill(240, 240, 240);
-    noStroke();
-    text(theText, point.x, point.y);
-  }
 }
