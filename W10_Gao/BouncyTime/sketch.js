@@ -1,8 +1,8 @@
 
 let video;
+let playButton, resetButton;
 let poseNet;
 let poses = [];
-let singlePose;
 let getFrame = true;
 let backgroundColor = 'rgba(255, 201, 207, 0.05)';
 let options = {
@@ -13,24 +13,34 @@ let options = {
   maxPoseDetections: 1,
   scoreThreshold: 0.5,
   nmsRadius: 20,
-  detectionType: 'multiple',
+  detectionType: 'single',
   multiplier: 0.75,
 }
-let mySound1, mySound2;
+let mySound1, mySound2, currentSong;
 let volumeValue = 0.2;
 
-let ring1, ring2, dress;
-let ring_sprite, dress_sprite;
+let shortRing, longRing, dress;
+let leftRingSprite, rightRingSprite, dress_sprite;
 
 let dressCreated = false;
-let sound2Played = false;
-
-let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
 let startdance = false;
 
-var h = 0;//the height of the moving dress
+let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
 
+let targetDressHeight = 0;
+let h = 0;//the height of the moving dress
 
+function preload(){
+  //preload sound
+  mySound1 = loadSound('assets/music1.ogg');
+  mySound2 = loadSound('assets/music2.ogg');
+  //preload images
+  shortRing = loadImage('assets/ring.png');
+  longRing = loadImage('assets/ring2.png');//this will be a sprite sheet
+  dress = loadImage('assets/dress.png');//this will be a sprite sheet
+  //spot for dress sprite bouncy animation
+
+}
 
 function setup() {
   createCanvas(640, 480);
@@ -38,10 +48,8 @@ function setup() {
   video = createCapture(VIDEO);
   video.size(width, height);
   video.hide();
-
-  //load sound
-  mySound1 = loadSound('assets/music1.ogg', loaded);
-  mySound2 = loadSound('assets/music2.ogg');
+  //assign sound
+  currentSong = mySound1; // remember to change currentSong when sound2 is playing
 
   // Handle PoseNet
   poseNet = ml5.poseNet(video, options, modelReady);
@@ -52,38 +60,41 @@ function setup() {
     getFrame = !getFrame;
   });
 
-  //sprite
-  ring1 = loadImage('assets/ring.png');
-  ring2 = loadImage('assets/ring2.png');
-  dress = loadImage('assets/dress.png');
-  ring_sprite = createSprite(220,25); //x, y position, x, y dimension (optional)
-  ring_sprite_2 = createSprite(420,25);
-  ring_sprite.addImage(ring1);
-  ring_sprite_2.addImage(ring1);
+  //draw sprite
+  leftRingSprite = createSprite(220,25);
+  rightRingSprite = createSprite(420,25);
+  leftRingSprite.addImage(shortRing); // shortRing is a reference to ring1 sprite
+  rightRingSprite.addImage(shortRing)
+
+  //create button
+  playbutton = createButton('Play/Pause');
+  playbutton.mousePressed(togglePlaying);
 
 }
 
-function loaded() {
-  mySound1.loop();
+function togglePlaying(){
+  if(!currentSong.isPlaying())
+  {
+    currentSong.play();
+    //playButton.html('Pause');
+  }else{
+    currentSong.pause();
+    //playButton.html('Play');
+  }
+
 }
 
 function modelReady() {
   //select('#status').style('display: none');
-  console.log('Model ready');
+  console.log('Model is ready');
 }
 
 function draw() {
     background(backgroundColor);
     drawVideo();
-    singlePose = poses[0];
     drawCustomPoints(poses);
     mySound1.setVolume(volumeValue);
-
     drawSprites();
-
-    if(startdance){
-      drawPalmmy();
-    }
 }
 
 function drawVideo() {
@@ -94,19 +105,16 @@ function drawVideo() {
     pop();
   }
 
-
-
 function drawCustomPoints(poses) {
-  //let singlePose = poses[0];
-  if (singlePose) {
-    drawTextAtPoint(singlePose.pose.leftWrist, '', 50);
-    drawTextAtPoint(singlePose.pose.rightWrist, '', 50);
-    volumeValue = singlePose.pose.leftWrist.y / height;
+  if (poses[0]) {
+    drawTextAtPoint(poses[0].pose.leftWrist, '🥚', 50);
+    drawTextAtPoint(poses[0].pose.rightWrist, '🥚', 50);
+    volumeValue = poses[0].pose.leftWrist.y / height;
     volumeValue = 1 - volumeValue;
 
     if(volumeValue > 0.5){
-      ring_sprite.addImage(ring2);
-      ring_sprite_2.addImage(ring2);
+      leftRingSprite.addImage(longRing);
+      rightRingSprite.addImage(longRing);
     }
 
     if(volumeValue > 0.75){
@@ -131,9 +139,9 @@ function drawTextAtPoint(point, theText, size) {
 
 function drawDress(){
     dressCreated = true;
-    // dress_sprite = createSprite(270,0);
-    // dress_sprite.addImage(dress);
-    targetDressHeight = singlePose.pose.rightShoulder.y;
+    dress_sprite = createSprite(270,0);
+    dress_sprite.addImage(dress);
+    targetDressHeight = poses[0].pose.rightShoulder.y;
 
 }
 
@@ -150,14 +158,14 @@ function moveDressDown(){
       pop();
     }
 
-    else if(!sound2Played && h >= targetDressHeight){
+    else if(!mySound2.isPlaying() && h >= targetDressHeight){
       console.log('dress into position');
-      removeSprite(ring_sprite);
-      removeSprite(ring_sprite_2);
+      removeSprite(leftRingSprite);
+      removeSprite(rightRingSprite);
       mySound2.loop();
+      currentSong = mySound2;
       mySound1.stop();
       gotPoses(poses);
-      sound2Played = true;
     }
 }
 
