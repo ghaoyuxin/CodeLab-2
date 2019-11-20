@@ -24,6 +24,7 @@ let leftRingSprite, rightRingSprite, dress_sprite;
 
 let dressCreated = false;
 let song2playing = false;
+let gameStart = false;
 
 //let lsX, lsY, rsX, rsY;
 let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
@@ -51,6 +52,7 @@ function setup() {
   video.hide();
   //assign sound
   currentSong = mySound1; // remember to change currentSong when sound2 is playing
+  currentSong.pause();
 
   // Handle PoseNet
   poseNet = ml5.poseNet(video, options, modelReady);
@@ -65,6 +67,8 @@ function setup() {
   let x = 220; // x coordinate
   leftRingSprite = createSprite(x,25);
   rightRingSprite = createSprite(640-x,25);
+  leftRingSprite.visible = false;
+  rightRingSprite.visible = false;
   leftRingSprite.addImage(shortRing); // shortRing is a reference to ring1 sprite
   rightRingSprite.addImage(shortRing)
 
@@ -83,6 +87,12 @@ function setup() {
 }
 
 function togglePlaying(){
+  if(!gameStart){
+    gameStart = true;
+    leftRingSprite.visible = true;
+    rightRingSprite.visible = true;
+  }
+
   if(!currentSong.isPlaying())
   {
     currentSong.play();
@@ -96,15 +106,18 @@ function togglePlaying(){
 
 function modelReady() {
   //select('#status').style('display: none');
-  console.log('Model is ready');
+  console.log('Model ready');
 }
 
 function draw() {
     background(backgroundColor);
     drawVideo();
-    drawCustomPoints(poses);
-    mySound1.setVolume(volumeValue);
     drawSprites();
+    if(gameStart)
+    {
+      drawCustomPoints(poses);
+      mySound1.setVolume(volumeValue);
+    }
 }
 
 function drawVideo() {
