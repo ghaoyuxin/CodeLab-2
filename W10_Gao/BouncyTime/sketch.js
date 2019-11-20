@@ -1,6 +1,6 @@
 
 let video;
-let playButton, resetButton;
+let playbutton, resetbutton;
 let poseNet;
 let poses = [];
 let getFrame = true;
@@ -11,7 +11,7 @@ let options = {
   flipHorizontal: true,
   minConfidence: 0.5,
   maxPoseDetections: 1,
-  scoreThreshold: 0.5,
+  scoreThreshold: 0.6,
   nmsRadius: 20,
   detectionType: 'single',
   multiplier: 0.75,
@@ -23,6 +23,7 @@ let shortRing, longRing, dress_sheet;
 let leftRingSprite, rightRingSprite, dress_sprite;
 
 let dressCreated = false;
+let song2playing = false;
 
 //let lsX, lsY, rsX, rsY;
 let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
@@ -37,7 +38,7 @@ function preload(){
   //preload images
   shortRing = loadImage('assets/ring.png');
   longRing = loadImage('assets/ring2.png');
-  //dress_sheet = loadSpriteSheet('assets/dress.png');//this will be a sprite sheet
+  //dress_sheet = loadSpriteSheet('assets/dress.png');
 
 
 }
@@ -74,8 +75,9 @@ function setup() {
   dress_sprite.addAnimation('bouncing', 'assets/dress_04.png', 'assets/dress_05.png', 'assets/dress_06.png',  'assets/dress_07.png', 'assets/dress_08.png');
   dress_sprite.addAnimation('idle', 'assets/dress_09.png', 'assets/dress_10.png', 'assets/dress_11.png');
 
+
   //create button
-  playbutton = createButton('Play/Pause');
+  playbutton = createButton('Play');
   playbutton.mousePressed(togglePlaying);
 
 }
@@ -84,10 +86,10 @@ function togglePlaying(){
   if(!currentSong.isPlaying())
   {
     currentSong.play();
-    //playButton.html('Pause');
+    playbutton.html('Pause');
   }else{
     currentSong.pause();
-    //playButton.html('Play');
+    playbutton.html('Play');
   }
 
 }
@@ -147,7 +149,6 @@ function drawTextAtPoint(point, theText, size) {
 
 function drawDress(){
     dressCreated = true;
-    //dress_sprite = createSprite(width/2,0);
     dress_sprite.visible = true;
     dress_sprite.changeAnimation('falling');
     targetDressHeight = poses[0].pose.rightShoulder.y;
@@ -162,14 +163,15 @@ function moveDressDown(){
 
     }
 
-    else if(!mySound2.isPlaying() && h >= targetDressHeight){
+    else if(!song2playing && h >= targetDressHeight){
       console.log('dress into position');
       removeSprite(leftRingSprite);
       removeSprite(rightRingSprite);
       mySound2.loop();
+      song2playing = true;
       currentSong = mySound2;
       mySound1.stop();
-      //gotPoses(poses);
+
     }
 }
 
