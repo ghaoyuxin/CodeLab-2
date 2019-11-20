@@ -27,12 +27,16 @@ let song2playing = false;
 let gameStart = false;
 let longRingCreated = false;
 let wristOn = false;
+let dressReadyToWear = false;
+let dressIsWearing = false;
 
-//let lsX, lsY, rsX, rsY;
+let lsX, lsY, rsX, rsY;
 let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
+let shoulderYLastFrame;
 
 let targetDressHeight = 0;
 let h = 0;//the height of the moving dress
+let tBouncing = 0;
 
 function preload(){
   //preload sound
@@ -183,79 +187,108 @@ function drawDress(){
 
 
 function moveDressDown(){
-    if(wristOn)
+    if(h < targetDressHeight && wristOn)
     {
-      dress_sprite.setSpeed(1,90);//speed = 1 px, degree = 90
-      hoop_sprite.setSpeed(1,90);
+        dress_sprite.setSpeed(1,90);//speed = 1 px, degree = 90
+        hoop_sprite.setSpeed(1,90);
     }
-    if(!wristOn){
+
+    if(h < targetDressHeight && !wristOn){
       dress_sprite.setSpeed(0);
       hoop_sprite.setSpeed(0);
     }
 
-    h = dress_sprite.position.y + 75;//h increments
-    console.log(h);
-    console.log(targetDressHeight);
+    h = dress_sprite.position.y + 75;//h increments, 75 as manuel offset
+    // console.log(h);
+    // console.log(targetDressHeight);
 
-    if(!song2playing && h >= targetDressHeight){
+    if(!dressIsWearing && h >= targetDressHeight){
       console.log('dress ready to wear');
-      transitionToWearDress();
-    }
-
-    function transitionToWearDress(){ //fucntion to chop my code into smaller blocks
-      //lerp rings out of frame
-      let t = 0;
-      t++;
-      leftRingSprite.setSpeed(1, -90);
-      rightRingSprite.setSpeed(1, -90);
-      hoop_sprite.setSpeed(2,-90);
-      if(t>300)
-      {
-        removeSprite(leftRingSprite);
-        removeSprite(rightRingSprite);
-        removeSprite(hoop_sprite);
-      }
-
-      //sound
-      mySound2.loop();
-      song2playing = true;
-      currentSong = mySound2;
-      mySound1.stop();
-
       //dress to wear
-      dress_sprite.setSpeed(0);
-      dress_sprite.changeAnimation('idle');
-
-
+      dressIsWearing = true;
+    }
+    if(dressIsWearing)
+    {
+      transitionToWearDress();
+      dressFollowPlayer();
     }
 }
 
-// function gotPoses(poses){
-//   //console.log(poses);
-//   if(poses.length > 0){
-//
-//     lsX = poses[0].pose.leftShoulder.position.x;
-//     lsY = poses[0].pose.leftShoulder.position.y;
-//     leftShoulderX = lerp(leftShoulderX, lsX, 0.5);
-//     leftShoulderY = lerp(leftShoulderY, lsY, 0.5);
-//
-//     rsX = poses[0].pose.rightShoulder.position.x;
-//     rsY = poses[0].pose.rightShoulder.position.y;
-//     rightShoulderX = lerp(rightShoulderX, rsX, 0.5);
-//     rightShoulderY = lerp(rightShoulderY, rsY, 0.5);
-//
-//   }
-//}
+function transitionToWearDress(){ //function to chop my code into smaller blocks
+    //lerp rings out of frame
+    let t = 0;
+    t++;
+    if(t>300)
+    {
+      removeSprite(leftRingSprite);
+      removeSprite(rightRingSprite);
+      removeSprite(hoop_sprite);
+    }
+    //sprite
+    leftRingSprite.setSpeed(1, -90);
+    rightRingSprite.setSpeed(1, -90);
+    hoop_sprite.setSpeed(2,-90);
+    //sound
+    if(!song2playing)
+    {
+      //sound
+      mySound2.loop();
+      currentSong = mySound2;
+      mySound1.stop();
+      song2playing = true;
+    }
+  }
 
-  // function drawPalmmy(){
-  // let diameter = dist(leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY);
-  // ellipse((leftShoulderX+rightShoulderX)/2, (leftShoulderY+rightShoulderY)/2, diameter);
-  // // dress_sprite = createSprite(270,0);
-  // // dress_sprite.addImage(dress);
-  // imageMode(CENTER);
-  // //image(palmmy, leftShoulderX+100, leftShoulderY+100, 320*diameter*0.018, 290*diameter*0.018);
-  //
-  // // dress_sprite.position(leftShoulderX, leftShoulderY);
-  // // dress_sprite.size(diameter*2, diameter*2);
+function dressFollowPlayer()
+  {
+    if(!dressReadyToWear){
+      dress_sprite.setSpeed(0);
+      dress_sprite.changeAnimation('idle');
+      dressReadyToWear = true;
+    }
+    gotPoses();
+    dress_sprite.position.x = (lsX+rsX)/2;
+    dress_sprite.position.y = (lsY+rsY -120)/2 ;
 
-//}
+
+    let diameter = dist(lsX, lsY, rsX, rsY);
+    dress_sprite.scale = diameter*0.01;
+
+    //if lsY+rsY/2
+    console.log(abs(shoulderYLastFrame - dress_sprite.position.y));
+    if(tBouncing <1 && abs(shoulderYLastFrame - dress_sprite.position.y) > 0.05* height)
+    {
+      tBouncing = 1;
+
+
+    }
+    if(tBouncing > 0 && tBouncing < 25){
+      dress_sprite.changeAnimation('bouncing');
+      tBouncing ++;
+    }
+    if(tBouncing >= 25){
+      tBouncing = 0;
+      dress_sprite.changeAnimation('idle');
+    }
+    shoulderYLastFrame = (lsY+rsY -120)/2;
+  }
+
+
+function gotPoses(){
+    console.log('Got Poses');
+    if(poses.length > 0){
+
+      lsX = poses[0].pose.leftShoulder.x;
+      lsY = poses[0].pose.leftShoulder.y;
+      // leftShoulderX = lerp(leftShoulderX, lsX, 0.5);
+      // leftShoulderY = lerp(leftShoulderY, lsY, 0.5);
+
+      rsX = poses[0].pose.rightShoulder.x;
+      rsY = poses[0].pose.rightShoulder.y;
+      // rightShoulderX = lerp(rightShoulderX, rsX, 0.5);
+      // rightShoulderY = lerp(rightShoulderY, rsY, 0.5);
+    }
+
+
+
+}
