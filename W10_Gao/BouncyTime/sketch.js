@@ -36,6 +36,7 @@ let shoulderYLastFrame;
 
 let targetDressHeight = 0;
 let h = 0;//the height of the moving dress
+let tRing = 0;
 let tBouncing = 0;
 
 function preload(){
@@ -216,17 +217,16 @@ function moveDressDown(){
 
 function transitionToWearDress(){ //function to chop my code into smaller blocks
     //lerp rings out of frame
-    let t = 0;
-    t++;
-    if(t>300)
+    tRing++;
+    if(tRing>300)
     {
       removeSprite(leftRingSprite);
       removeSprite(rightRingSprite);
       removeSprite(hoop_sprite);
     }
     //sprite
-    leftRingSprite.setSpeed(1, -90);
-    rightRingSprite.setSpeed(1, -90);
+    leftRingSprite.setSpeed(0.5, -90);
+    rightRingSprite.setSpeed(0.5, -90);
     hoop_sprite.setSpeed(2,-90);
     //sound
     if(!song2playing)
@@ -254,7 +254,7 @@ function dressFollowPlayer()
     let diameter = dist(lsX, lsY, rsX, rsY);
     dress_sprite.scale = diameter*0.01;
 
-    //if lsY+rsY/2
+    //change to bounce animation
     console.log(abs(shoulderYLastFrame - dress_sprite.position.y));
     if(tBouncing <1 && abs(shoulderYLastFrame - dress_sprite.position.y) > 0.05* height)
     {
