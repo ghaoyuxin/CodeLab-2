@@ -19,8 +19,8 @@ let options = {
 let mySound1, mySound2, currentSong;
 let volumeValue = 0.2;
 
-let shortRing, longRing, dress_sheet;
-let leftRingSprite, rightRingSprite, dress_sprite;
+let shortRing, longRing;
+let leftRingSprite, rightRingSprite, dress_sprite, hoop_sprite;
 
 let dressCreated = false;
 let song2playing = false;
@@ -79,6 +79,10 @@ function setup() {
   dress_sprite.addAnimation('bouncing', 'assets/dress_04.png', 'assets/dress_05.png', 'assets/dress_06.png',  'assets/dress_07.png', 'assets/dress_08.png');
   dress_sprite.addAnimation('idle', 'assets/dress_09.png', 'assets/dress_10.png', 'assets/dress_11.png');
 
+  hoop_sprite = createSprite(width/2, 0);
+  hoop_sprite.visible = false;
+  hoop_sprite.addAnimation('default','assets/hoop_00.png', 'assets/hoop_01.png', 'assets/hoop_02.png', 'assets/hoop_03.png');
+
 
   //create button
   playbutton = createButton('Play');
@@ -112,11 +116,11 @@ function modelReady() {
 function draw() {
     background(backgroundColor);
     drawVideo();
+    currentSong.setVolume(volumeValue);
     drawSprites();
     if(gameStart)
     {
       drawCustomPoints(poses);
-      mySound1.setVolume(volumeValue);
     }
 }
 
@@ -143,11 +147,10 @@ function drawCustomPoints(poses) {
     if(volumeValue > 0.75){
         console.log('ready to move dress');
         if(!dressCreated) drawDress();
-        moveDressDown();
-
+        moveDressDown(true);
         //stop looping music
-      }
-    }
+    }else{moveDressDown(false)};
+  }
 }
 
 function drawTextAtPoint(point, theText, size) {
@@ -163,27 +166,55 @@ function drawTextAtPoint(point, theText, size) {
 function drawDress(){
     dressCreated = true;
     dress_sprite.visible = true;
+    hoop_sprite.visible = true;
     dress_sprite.changeAnimation('falling');
     targetDressHeight = poses[0].pose.rightShoulder.y;
 }
 
 
-function moveDressDown(){
-    h = dress_sprite.position.y;
-    if(h < targetDressHeight){
-      console.log(h);
+function moveDressDown(wristOn){
+    if(wristOn)
+    {
       dress_sprite.setSpeed(1,90);//speed = 1 px, degree = 90
-
+      hoop_sprite.setSpeed(1,90);
+    }else{
+      dress_sprite.setSpeed(0);
+      hoop_sprite.setSpeed(0);
     }
 
-    else if(!song2playing && h >= targetDressHeight){
-      console.log('dress into position');
-      removeSprite(leftRingSprite);
-      removeSprite(rightRingSprite);
+    h = dress_sprite.position.y;//h increments
+    console.log(h);
+    console.log(targetDressHeight);
+
+    if(!song2playing && h >= targetDressHeight){
+      console.log('dress ready to wear');
+      transitionToWearDress();
+    }
+
+    function transitionToWearDress(){
+      //lerp rings out of frame
+      let t = 0;
+      t++;
+      leftRingSprite.setSpeed(1, -90);
+      rightRingSprite.setSpeed(1, -90);
+      hoop_sprite.setSpeed(2,-90);
+      if(t>300)
+      {
+        removeSprite(leftRingSprite);
+        removeSprite(rightRingSprite);
+        removeSprite(hoop_sprite);
+      }
+
+      //sound
       mySound2.loop();
       song2playing = true;
       currentSong = mySound2;
       mySound1.stop();
+
+      //dress to wear
+      dress_sprite.setSpeed(0);
+      dress_sprite.changeAnimation('idle');
+
 
     }
 }
