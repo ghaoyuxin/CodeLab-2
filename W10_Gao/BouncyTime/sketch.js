@@ -19,12 +19,12 @@ let options = {
 let mySound1, mySound2, currentSong;
 let volumeValue = 0.2;
 
-let shortRing, longRing, dress;
+let shortRing, longRing, dress_sheet;
 let leftRingSprite, rightRingSprite, dress_sprite;
 
 let dressCreated = false;
-let startdance = false;
 
+//let lsX, lsY, rsX, rsY;
 let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
 
 let targetDressHeight = 0;
@@ -36,9 +36,9 @@ function preload(){
   mySound2 = loadSound('assets/music2.ogg');
   //preload images
   shortRing = loadImage('assets/ring.png');
-  longRing = loadImage('assets/ring2.png');//this will be a sprite sheet
-  dress = loadImage('assets/dress.png');//this will be a sprite sheet
-  //spot for dress sprite bouncy animation
+  longRing = loadImage('assets/ring2.png');
+  //dress_sheet = loadSpriteSheet('assets/dress.png');//this will be a sprite sheet
+
 
 }
 
@@ -61,10 +61,18 @@ function setup() {
   });
 
   //draw sprite
-  leftRingSprite = createSprite(220,25);
-  rightRingSprite = createSprite(420,25);
+  let x = 220; // x coordinate
+  leftRingSprite = createSprite(x,25);
+  rightRingSprite = createSprite(640-x,25);
   leftRingSprite.addImage(shortRing); // shortRing is a reference to ring1 sprite
   rightRingSprite.addImage(shortRing)
+
+  //animation
+  dress_sprite = createSprite(width/2, 0);
+  dress_sprite.visible = false;
+  dress_sprite.addAnimation('falling', 'assets/dress_00.png', 'assets/dress_01.png', 'assets/dress_02.png', 'assets/dress_03.png');
+  dress_sprite.addAnimation('bouncing', 'assets/dress_04.png', 'assets/dress_05.png', 'assets/dress_06.png',  'assets/dress_07.png', 'assets/dress_08.png');
+  dress_sprite.addAnimation('idle', 'assets/dress_09.png', 'assets/dress_10.png', 'assets/dress_11.png');
 
   //create button
   playbutton = createButton('Play/Pause');
@@ -125,7 +133,7 @@ function drawCustomPoints(poses) {
         //stop looping music
       }
     }
-  }
+}
 
 function drawTextAtPoint(point, theText, size) {
       if (point.confidence > 0.2) {
@@ -139,23 +147,19 @@ function drawTextAtPoint(point, theText, size) {
 
 function drawDress(){
     dressCreated = true;
-    dress_sprite = createSprite(270,0);
-    dress_sprite.addImage(dress);
+    //dress_sprite = createSprite(width/2,0);
+    dress_sprite.visible = true;
+    dress_sprite.changeAnimation('falling');
     targetDressHeight = poses[0].pose.rightShoulder.y;
-
 }
 
 
 function moveDressDown(){
-
+    h = dress_sprite.position.y;
     if(h < targetDressHeight){
-      h++;
       console.log(h);
-      push();
-      translate(270,h);
-      noStroke();
-      rect(0,0,100,200);
-      pop();
+      dress_sprite.setSpeed(1,90);//speed = 1 px, degree = 90
+
     }
 
     else if(!mySound2.isPlaying() && h >= targetDressHeight){
@@ -165,37 +169,36 @@ function moveDressDown(){
       mySound2.loop();
       currentSong = mySound2;
       mySound1.stop();
-      gotPoses(poses);
+      //gotPoses(poses);
     }
 }
 
-function gotPoses(poses){
-  //console.log(poses);
-  if(poses.length > 0){
+// function gotPoses(poses){
+//   //console.log(poses);
+//   if(poses.length > 0){
+//
+//     lsX = poses[0].pose.leftShoulder.position.x;
+//     lsY = poses[0].pose.leftShoulder.position.y;
+//     leftShoulderX = lerp(leftShoulderX, lsX, 0.5);
+//     leftShoulderY = lerp(leftShoulderY, lsY, 0.5);
+//
+//     rsX = poses[0].pose.rightShoulder.position.x;
+//     rsY = poses[0].pose.rightShoulder.position.y;
+//     rightShoulderX = lerp(rightShoulderX, rsX, 0.5);
+//     rightShoulderY = lerp(rightShoulderY, rsY, 0.5);
+//
+//   }
+//}
 
-    let lsX = poses[0].pose.keypoints[5].position.x;
-    let lsY = poses[0].pose.keypoints[5].position.y;
-    leftShoulderX = lerp(leftShoulderX, lsX, 0.5);
-    leftShoulderY = lerp(leftShoulderY, lsY, 0.5);
+  // function drawPalmmy(){
+  // let diameter = dist(leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY);
+  // ellipse((leftShoulderX+rightShoulderX)/2, (leftShoulderY+rightShoulderY)/2, diameter);
+  // // dress_sprite = createSprite(270,0);
+  // // dress_sprite.addImage(dress);
+  // imageMode(CENTER);
+  // //image(palmmy, leftShoulderX+100, leftShoulderY+100, 320*diameter*0.018, 290*diameter*0.018);
+  //
+  // // dress_sprite.position(leftShoulderX, leftShoulderY);
+  // // dress_sprite.size(diameter*2, diameter*2);
 
-    let rsX = poses[0].pose.keypoints[6].position.x;
-    let rsY = poses[0].pose.keypoints[6].position.y;
-    rightShoulderX = lerp(rightShoulderX, rsX, 0.5);
-    rightShoulderY = lerp(rightShoulderY, rsY, 0.5);
-
-  }
-  startdance = true;
-}
-
-  function drawPalmmy(){
-  let diameter = dist(leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY);
-  ellipse((leftShoulderX+rightShoulderX)/2, (leftShoulderY+rightShoulderY)/2, diameter);
-  // dress_sprite = createSprite(270,0);
-  // dress_sprite.addImage(dress);
-  imageMode(CENTER);
-  //image(palmmy, leftShoulderX+100, leftShoulderY+100, 320*diameter*0.018, 290*diameter*0.018);
-
-  // dress_sprite.position(leftShoulderX, leftShoulderY);
-  // dress_sprite.size(diameter*2, diameter*2);
-
-}
+//}
