@@ -25,6 +25,8 @@ let leftRingSprite, rightRingSprite, dress_sprite, hoop_sprite;
 let dressCreated = false;
 let song2playing = false;
 let gameStart = false;
+let longRingCreated = false;
+let wristOn = false;
 
 //let lsX, lsY, rsX, rsY;
 let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
@@ -116,7 +118,7 @@ function modelReady() {
 function draw() {
     background(backgroundColor);
     drawVideo();
-    currentSong.setVolume(volumeValue);
+    mySound1.setVolume(volumeValue);
     drawSprites();
     if(gameStart)
     {
@@ -139,17 +141,25 @@ function drawCustomPoints(poses) {
     volumeValue = poses[0].pose.leftWrist.y / height;
     volumeValue = 1 - volumeValue;
 
-    if(volumeValue > 0.5){
+    if(!longRingCreated && volumeValue > 0.5){
       leftRingSprite.addImage(longRing);
       rightRingSprite.addImage(longRing);
+      longRingCreated = true;
+    }
+
+    if(dressCreated && volumeValue <= 0.75)
+    {
+      wristOn = false;
+      moveDressDown();
     }
 
     if(volumeValue > 0.75){
         console.log('ready to move dress');
         if(!dressCreated) drawDress();
-        moveDressDown(true);
+        wristOn = true;
+        moveDressDown();
         //stop looping music
-    }else{moveDressDown(false)};
+    }
   }
 }
 
@@ -172,17 +182,18 @@ function drawDress(){
 }
 
 
-function moveDressDown(wristOn){
+function moveDressDown(){
     if(wristOn)
     {
       dress_sprite.setSpeed(1,90);//speed = 1 px, degree = 90
       hoop_sprite.setSpeed(1,90);
-    }else{
+    }
+    if(!wristOn){
       dress_sprite.setSpeed(0);
       hoop_sprite.setSpeed(0);
     }
 
-    h = dress_sprite.position.y;//h increments
+    h = dress_sprite.position.y + 75;//h increments
     console.log(h);
     console.log(targetDressHeight);
 
@@ -191,7 +202,7 @@ function moveDressDown(wristOn){
       transitionToWearDress();
     }
 
-    function transitionToWearDress(){
+    function transitionToWearDress(){ //fucntion to chop my code into smaller blocks
       //lerp rings out of frame
       let t = 0;
       t++;
