@@ -19,8 +19,8 @@ let options = {
 let mySound1, mySound2, currentSong;
 let volumeValue = 0.2;
 
-let shortRing, longRing;
-let leftRingSprite, rightRingSprite, dress_sprite, hoop_sprite;
+let shortRing, longRing, hat;
+let leftRingSprite, rightRingSprite, dress_sprite, hoop_sprite, hat_sprite, hat_sprite_2;
 
 let dressCreated = false;
 let song2playing = false;
@@ -30,7 +30,7 @@ let wristOn = false;
 let dressReadyToWear = false;
 let dressIsWearing = false;
 
-let lsX, lsY, rsX, rsY;
+let lsX, lsY, rsX, rsY, leX, leY, reX, reY;
 let leftShoulderX, leftShoulderY, rightShoulderX, rightShoulderY;
 let shoulderYLastFrame;
 
@@ -46,7 +46,8 @@ function preload(){
   //preload images
   shortRing = loadImage('assets/ring.png');
   longRing = loadImage('assets/ring2.png');
-  //dress_sheet = loadSpriteSheet('assets/dress.png');
+  hat = loadImage('assets/hat.png');
+  //dress_sheet = loadSpriteSheet('assets/dress.png');//known issue that sprite sheet won't work in p5.play
 
 
 }
@@ -79,6 +80,10 @@ function setup() {
   leftRingSprite.addImage(shortRing); // shortRing is a reference to ring1 sprite
   rightRingSprite.addImage(shortRing)
 
+  hat_sprite_2 = createSprite(0, 0);
+  hat_sprite_2.visible = false;
+  hat_sprite_2.addImage(hat);
+
   //animation
   dress_sprite = createSprite(width/2, 0);
   dress_sprite.visible = false;
@@ -90,7 +95,9 @@ function setup() {
   hoop_sprite.visible = false;
   hoop_sprite.addAnimation('default','assets/hoop_00.png', 'assets/hoop_01.png', 'assets/hoop_02.png', 'assets/hoop_03.png');
 
-
+  hat_sprite = createSprite(width/2, 0);
+  hat_sprite.visible = false;
+  hat_sprite.addAnimation('droppingHat', 'assets/hat_00.png', 'assets/hat_01.png', 'assets/hat_02.png', 'assets/hat_03.png');
   //create button
   playbutton = createButton('Play');
   playbutton.mousePressed(togglePlaying);
@@ -182,6 +189,7 @@ function drawDress(){
     dressCreated = true;
     dress_sprite.visible = true;
     hoop_sprite.visible = true;
+    hat_sprite.visible = true;
     dress_sprite.changeAnimation('falling');
     targetDressHeight = poses[0].pose.rightShoulder.y;
 }
@@ -192,11 +200,13 @@ function moveDressDown(){
     {
         dress_sprite.setSpeed(1,90);//speed = 1 px, degree = 90
         hoop_sprite.setSpeed(1,90);
+        hat_sprite.setSpeed(1,90);
     }
 
     if(h < targetDressHeight && !wristOn){
       dress_sprite.setSpeed(0);
       hoop_sprite.setSpeed(0);
+      hat_sprite.setSpeed(0);
     }
 
     h = dress_sprite.position.y + 75;//h increments, 75 as manuel offset
@@ -228,6 +238,7 @@ function transitionToWearDress(){ //function to chop my code into smaller blocks
     leftRingSprite.setSpeed(0.5, -90);
     rightRingSprite.setSpeed(0.5, -90);
     hoop_sprite.setSpeed(2,-90);
+    hat_sprite.visible = false;
     //sound
     if(!song2playing)
     {
@@ -245,21 +256,30 @@ function dressFollowPlayer()
       dress_sprite.setSpeed(0);
       dress_sprite.changeAnimation('idle');
       dressReadyToWear = true;
+      //hat_sprite.addImage(hat);
+      hat_sprite_2.visible = true;
     }
+
     gotPoses();
     dress_sprite.position.x = (lsX+rsX)/2;
     dress_sprite.position.y = (lsY+rsY -120)/2 ;
 
+    hat_sprite_2.position.x = (leX+reX)/2;
+    hat_sprite_2.position.y = (leY+reY-180)/2;
+    // console.log(hat_sprite_2.position.x);
+    // console.log(hat_sprite_2.position.y);
 
-    let diameter = dist(lsX, lsY, rsX, rsY);
-    dress_sprite.scale = diameter*0.01;
+    let dress_diameter = dist(lsX, lsY, rsX, rsY);
+    dress_sprite.scale = dress_diameter*0.01;
+
+    let hat_diameter = dist(leX, leY, reX, reY);
+    hat_sprite_2.scale = hat_diameter*0.015;
 
     //change to bounce animation
-    console.log(abs(shoulderYLastFrame - dress_sprite.position.y));
+    //console.log(abs(shoulderYLastFrame - dress_sprite.position.y));
     if(tBouncing <1 && abs(shoulderYLastFrame - dress_sprite.position.y) > 0.05* height)
     {
       tBouncing = 1;
-
 
     }
     if(tBouncing > 0 && tBouncing < 25){
@@ -275,18 +295,21 @@ function dressFollowPlayer()
 
 
 function gotPoses(){
-    console.log('Got Poses');
+    //console.log('Got Poses');
     if(poses.length > 0){
 
       lsX = poses[0].pose.leftShoulder.x;
       lsY = poses[0].pose.leftShoulder.y;
-      // leftShoulderX = lerp(leftShoulderX, lsX, 0.5);
-      // leftShoulderY = lerp(leftShoulderY, lsY, 0.5);
 
       rsX = poses[0].pose.rightShoulder.x;
       rsY = poses[0].pose.rightShoulder.y;
-      // rightShoulderX = lerp(rightShoulderX, rsX, 0.5);
-      // rightShoulderY = lerp(rightShoulderY, rsY, 0.5);
+
+      leX = poses[0].pose.leftEar.x;
+      leY = poses[0].pose.leftEar.y;
+
+      reX = poses[0].pose.rightEar.x;
+      reY = poses[0].pose.rightEar.y;
+
     }
 
 
