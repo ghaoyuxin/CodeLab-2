@@ -58,7 +58,6 @@ public class CheckMatch : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         ServiceLocators.removedMatches++;
-        print(ServiceLocators.removedMatches);
         if (ServiceLocators.removedMatches == 3) _genScript.Reset();
         for (int i = 0; i < MatchList.Count; i++)
         {
