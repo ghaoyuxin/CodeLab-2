@@ -14,6 +14,7 @@ public class CheckMatch : MonoBehaviour
     {
         dotPrefabs2 = Resources.LoadAll<GameObject>("");
         _genScript = GameObject.FindGameObjectWithTag("GameMan").GetComponent<GenerateScript>();
+        if (_genScript == null) print("Generate script is missing");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -26,10 +27,11 @@ public class CheckMatch : MonoBehaviour
             if (TriggerList[i].tag == TriggerList[i + 1].tag)
             {
                 matchCount++;
-                if (!MatchList.Contains(other.gameObject))
+                if (!MatchList.Contains(other.gameObject)) //something is wrong with this match list, I will come back to the bug
                 {
                     MatchList.Add(TriggerList[i].gameObject);
                     MatchList.Add(TriggerList[i + 1].gameObject);
+                    print(i + MatchList[i].name);
                 }
             }
         }
