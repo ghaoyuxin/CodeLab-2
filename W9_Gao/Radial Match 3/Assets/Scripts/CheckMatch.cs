@@ -57,12 +57,14 @@ public class CheckMatch : MonoBehaviour
     private IEnumerator RemoveMatches()
     {
         yield return new WaitForSeconds(1);
+        ServiceLocators.removedMatches++;
+        print(ServiceLocators.removedMatches);
+        if (ServiceLocators.removedMatches == 3) _genScript.Reset();
         for (int i = 0; i < MatchList.Count; i++)
         {
             Destroy(MatchList[i]);
         }
-        if (ServiceLocators.levelMatchCount == 3) _genScript.Reset();
-        ServiceLocators.levelMatchCount++;
+
     }
 
     private void Repopulate(Transform dot)

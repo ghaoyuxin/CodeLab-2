@@ -6,5 +6,5 @@ public class ServiceLocators
 {
     public static bool readyToRepopulate;
     public static bool foundAMatch = false;
-    public static int levelMatchCount = 0;
+    public static int removedMatches = 0;
 }

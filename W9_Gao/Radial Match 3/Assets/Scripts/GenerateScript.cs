@@ -36,34 +36,31 @@ public class GenerateScript : MonoBehaviour
     }
     private void Update()
     {
-        Reset();
+        if (Input.GetKeyDown(KeyCode.R)) Reset();
 
         UpdateView();
 
-        print(ServiceLocators.levelMatchCount);
     }
 
     public void Reset()
     {
-        ServiceLocators.levelMatchCount = 0;
-        if (Input.GetKeyDown(KeyCode.R))
+        ServiceLocators.removedMatches = 0;
+
+        foreach (Transform child in innerRing)
         {
-            foreach (Transform child in innerRing)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-            foreach (Transform child in middleRing)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-            foreach (Transform child in outerRing)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-            GenerateDots(0.55f, 3, 60, innerRing);
-            GenerateDots(1.5f, 6, 0, middleRing);
-            GenerateDots(2.4f, 12, 0, outerRing);
+            GameObject.Destroy(child.gameObject);
         }
+        foreach (Transform child in middleRing)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        foreach (Transform child in outerRing)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        GenerateDots(0.55f, 3, 60, innerRing);
+        GenerateDots(1.5f, 6, 0, middleRing);
+        GenerateDots(2.4f, 12, 0, outerRing);
     }
 
     private void UpdateView()
