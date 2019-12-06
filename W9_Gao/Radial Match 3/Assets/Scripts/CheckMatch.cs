@@ -8,10 +8,12 @@ public class CheckMatch : MonoBehaviour
     private List<GameObject> MatchList = new List<GameObject>();
     private List<GameObject> RepopulateList = new List<GameObject>();
     private GameObject[] dotPrefabs2;
+    private GenerateScript _genScript;
 
     private void Start()
     {
         dotPrefabs2 = Resources.LoadAll<GameObject>("");
+        _genScript = GameObject.FindGameObjectWithTag("GameMan").GetComponent<GenerateScript>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -59,6 +61,8 @@ public class CheckMatch : MonoBehaviour
         {
             Destroy(MatchList[i]);
         }
+        if (ServiceLocators.levelMatchCount == 3) _genScript.Reset();
+        ServiceLocators.levelMatchCount++;
     }
 
     private void Repopulate(Transform dot)

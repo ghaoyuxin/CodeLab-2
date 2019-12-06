@@ -36,6 +36,16 @@ public class GenerateScript : MonoBehaviour
     }
     private void Update()
     {
+        Reset();
+
+        UpdateView();
+
+        print(ServiceLocators.levelMatchCount);
+    }
+
+    public void Reset()
+    {
+        ServiceLocators.levelMatchCount = 0;
         if (Input.GetKeyDown(KeyCode.R))
         {
             foreach (Transform child in innerRing)
@@ -54,7 +64,10 @@ public class GenerateScript : MonoBehaviour
             GenerateDots(1.5f, 6, 0, middleRing);
             GenerateDots(2.4f, 12, 0, outerRing);
         }
+    }
 
+    private void UpdateView()
+    {
         if (ServiceLocators.foundAMatch) foundMatch.enabled = true;
         if (!ServiceLocators.foundAMatch) foundMatch.enabled = false;
     }
