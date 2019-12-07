@@ -27,7 +27,7 @@ public class CheckMatch : MonoBehaviour
             if (TriggerList[i].tag == TriggerList[i + 1].tag)
             {
                 matchCount++;
-                if (!MatchList.Contains(other.gameObject)) //something is wrong with this match list, I will come back to the bug
+                if (!MatchList.Contains(other.gameObject)) //something is wrong with this match list
                 {
                     MatchList.Add(TriggerList[i].gameObject);
                     MatchList.Add(TriggerList[i + 1].gameObject);

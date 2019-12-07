@@ -11,8 +11,7 @@ public class GenerateScript : MonoBehaviour
     public Transform innerRing;
     public Transform middleRing;
     public Transform outerRing;
-    public SpriteRenderer foundMatch;
-    [HideInInspector]
+    public SpriteRenderer foundMatchUI;
     private GameObject[] dotPrefabs;
 
     private void Start()
@@ -65,7 +64,7 @@ public class GenerateScript : MonoBehaviour
 
     private void UpdateView()
     {
-        if (ServiceLocators.foundAMatch) foundMatch.enabled = true;
-        if (!ServiceLocators.foundAMatch) foundMatch.enabled = false;
+        if (ServiceLocators.foundAMatch) foundMatchUI.enabled = true;
+        if (!ServiceLocators.foundAMatch) foundMatchUI.enabled = false;
     }
 }
