@@ -8,6 +8,7 @@ TagManager:
   - blue
   - purple
   - orange
+  - GameMan
   layers:
   - Default
   - TransparentFX

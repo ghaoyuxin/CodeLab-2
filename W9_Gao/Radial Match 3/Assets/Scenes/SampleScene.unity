@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 245702187}
   m_Layer: 0
   m_Name: GameMan
-  m_TagString: Untagged
+  m_TagString: GameMan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -233,7 +233,7 @@ MonoBehaviour:
   innerRing: {fileID: 1457124443}
   middleRing: {fileID: 1084799728}
   outerRing: {fileID: 377724187}
-  foundMatch: {fileID: 1238810016}
+  foundMatchUI: {fileID: 1238810016}
 --- !u!4 &245702188
 Transform:
   m_ObjectHideFlags: 0
@@ -376,7 +376,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 9.514473, y: 0}
+  m_Offset: {x: 9.514473, y: 0.0000004172325}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -387,7 +387,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 24.57751, y: 5.34}
+  m_Size: {x: 24.57751, y: 1.8531977}
   m_EdgeRadius: 0
 --- !u!212 &326232354
 SpriteRenderer:
@@ -631,7 +631,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 9.425135, y: 0}
+  m_Offset: {x: 9.425135, y: -0.033513904}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -642,7 +642,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 24.756187, y: 5.34}
+  m_Size: {x: 24.756187, y: 1.6030419}
   m_EdgeRadius: 0
 --- !u!212 &744653171
 SpriteRenderer:
@@ -1675,7 +1675,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 9.402593, y: 0}
+  m_Offset: {x: 9.402593, y: -0.052864045}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1686,7 +1686,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 24.801271, y: 5.34}
+  m_Size: {x: 24.801271, y: 2.0626106}
   m_EdgeRadius: 0
 --- !u!212 &2002089407
 SpriteRenderer:

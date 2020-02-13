@@ -6,6 +6,7 @@ let poses = [];
 let getFrame = true;
 let backgroundColor = 'rgba(255, 201, 207, 0.05)';
 let options = {
+  //architecture: 'ResNet50',
   imageScaleFactor: 0.3,
   outputStride: 16,
   flipHorizontal: true,
@@ -14,7 +15,7 @@ let options = {
   scoreThreshold: 0.6,
   nmsRadius: 20,
   detectionType: 'single',
-  multiplier: 0.75,
+  multiplier: 1.0,
 }
 let mySound1, mySound2, currentSong;
 let volumeValue = 0.2;
@@ -262,10 +263,10 @@ function dressFollowPlayer()
 
     gotPoses();
     dress_sprite.position.x = (lsX+rsX)/2;
-    dress_sprite.position.y = (lsY+rsY -120)/2 ;
+    dress_sprite.position.y = (lsY+rsY)*0.85/2 ;
 
     hat_sprite_2.position.x = (leX+reX)/2;
-    hat_sprite_2.position.y = (leY+reY-180)/2;
+    hat_sprite_2.position.y = (leY+reY)*0.6/2;
     // console.log(hat_sprite_2.position.x);
     // console.log(hat_sprite_2.position.y);
 
@@ -277,7 +278,7 @@ function dressFollowPlayer()
 
     //change to bounce animation
     //console.log(abs(shoulderYLastFrame - dress_sprite.position.y));
-    if(tBouncing <1 && abs(shoulderYLastFrame - dress_sprite.position.y) > 0.05* height)
+    if(tBouncing <1 && abs(shoulderYLastFrame - dress_sprite.position.y) > 0.1* height)
     {
       tBouncing = 1;
 
